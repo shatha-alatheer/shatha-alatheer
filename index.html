@@ -16,8 +16,8 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'Tajawal', sans-serif; direction: rtl; background: var(--brown); color: var(--text-dark); min-height: 100vh; }
 .screen { display: none; min-height: 100vh; }
-.screen.active { display: block; }
-
+.screen.active { display: block; min-height: 100vh; }
+  
 /* LOGIN */
 #loginScreen { display: flex; align-items: center; justify-content: center; padding: 2rem; background: var(--brown); }
 #loginScreen.active { display: flex; }
@@ -36,8 +36,8 @@ body { font-family: 'Tajawal', sans-serif; direction: rtl; background: var(--bro
 .error-box { font-size: 13px; color: #7A2E1E; background: #F5D5CF; padding: 9px 12px; border-radius: 8px; margin-bottom: 12px; display: none; }
 
 /* HOME */
-#homeScreen { background: var(--cream); }
-.top-bar { background: var(--brown); padding: 1rem 1.5rem; display: flex; align-items: center; justify-content: space-between; }
+#homeScreen { background: var(--cream); min-height: 100vh; }
+  .top-bar { background: var(--brown); padding: 1rem 1.5rem; display: flex; align-items: center; justify-content: space-between; }
 .brand { display: flex; align-items: center; gap: 12px; }
 .s-mark { width: 36px; height: 36px; background: var(--cream); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; color: var(--brown); }
 .brand h1 { font-size: 16px; font-weight: 700; color: var(--cream); }
