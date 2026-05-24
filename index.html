@@ -14,34 +14,29 @@
   --white: #FFFDF8;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Tajawal', sans-serif; direction: rtl; background: var(--cream); color: var(--text-dark); min-height: 100vh; }
+body { font-family: 'Tajawal', sans-serif; direction: rtl; background: var(--brown); color: var(--text-dark); min-height: 100vh; }
 .screen { display: none; min-height: 100vh; }
 .screen.active { display: block; }
 
-
-
 /* LOGIN */
-#ownerLoginScreen { background: var(--brown); display: flex; align-items: center; justify-content: center; padding: 2rem; }
-#ownerLoginScreen.active { display: flex; }
+#loginScreen { display: flex; align-items: center; justify-content: center; padding: 2rem; background: var(--brown); }
+#loginScreen.active { display: flex; }
 .login-card { background: var(--cream); border-radius: 16px; padding: 2.5rem 2rem; width: 100%; max-width: 340px; }
 .login-header { text-align: center; margin-bottom: 2rem; }
-.mini-logo { width: 48px; height: 48px; background: var(--brown); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 20px; font-weight: 700; color: var(--cream); }
-.login-header h2 { font-size: 20px; font-weight: 700; color: var(--text-dark); }
+.mini-logo { width: 56px; height: 56px; background: var(--brown); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 24px; font-weight: 700; color: var(--cream); }
+.login-header h2 { font-size: 22px; font-weight: 700; color: var(--text-dark); }
 .login-header p { font-size: 13px; color: var(--text-mid); margin-top: 4px; }
-
-/* FIELDS */
 .field { margin-bottom: 14px; }
 .field label { font-size: 13px; color: var(--text-mid); display: block; margin-bottom: 6px; font-weight: 500; }
-.field input, .field select, .field textarea { width: 100%; padding: 10px 14px; border: 1.5px solid var(--cream-dark); border-radius: 8px; font-size: 14px; background: var(--white); color: var(--text-dark); font-family: 'Tajawal', sans-serif; transition: border-color 0.15s; }
+.field input, .field select, .field textarea { width: 100%; padding: 11px 14px; border: 1.5px solid var(--cream-dark); border-radius: 8px; font-size: 14px; background: var(--white); color: var(--text-dark); font-family: 'Tajawal', sans-serif; transition: border-color 0.15s; }
 .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--brown); }
 .field textarea { resize: none; height: 85px; }
-.btn-main { width: 100%; padding: 12px; background: var(--brown); color: var(--cream); border: none; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: 'Tajawal', sans-serif; transition: background 0.15s; }
+.btn-main { width: 100%; padding: 13px; background: var(--brown); color: var(--cream); border: none; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: 'Tajawal', sans-serif; transition: background 0.15s; }
 .btn-main:hover { background: var(--brown-dark); }
 .error-box { font-size: 13px; color: #7A2E1E; background: #F5D5CF; padding: 9px 12px; border-radius: 8px; margin-bottom: 12px; display: none; }
-.back-link { text-align: center; margin-top: 1rem; font-size: 13px; color: var(--text-mid); }
-.back-link span { color: var(--brown); cursor: pointer; font-weight: 500; }
 
-/* TOP BAR */
+/* HOME */
+#homeScreen { background: var(--cream); }
 .top-bar { background: var(--brown); padding: 1rem 1.5rem; display: flex; align-items: center; justify-content: space-between; }
 .brand { display: flex; align-items: center; gap: 12px; }
 .s-mark { width: 36px; height: 36px; background: var(--cream); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; color: var(--brown); }
@@ -49,8 +44,6 @@ body { font-family: 'Tajawal', sans-serif; direction: rtl; background: var(--cre
 .brand p { font-size: 11px; color: var(--cream-darker); margin-top: 1px; }
 .logout-btn { background: transparent; border: 1px solid rgba(240,234,214,0.3); color: var(--cream-darker); padding: 6px 14px; border-radius: 6px; font-size: 12px; cursor: pointer; font-family: 'Tajawal', sans-serif; }
 .logout-btn:hover { border-color: var(--cream); color: var(--cream); }
-
-/* MAIN CONTENT */
 .main-content { padding: 1.5rem; max-width: 960px; margin: 0 auto; }
 .section-title { font-size: 13px; font-weight: 700; color: var(--text-mid); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem; }
 .buildings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
@@ -63,7 +56,8 @@ body { font-family: 'Tajawal', sans-serif; direction: rtl; background: var(--cre
 .b-count { display: inline-block; background: var(--brown); color: var(--cream); font-size: 12px; padding: 3px 10px; border-radius: 20px; margin-top: 10px; font-weight: 500; }
 .loading-state { text-align: center; padding: 3rem; color: var(--text-mid); font-size: 15px; }
 
-/* BUILDING HEADER */
+/* BUILDING */
+#buildingScreen { background: var(--cream); }
 .b-header { background: var(--brown); padding: 1rem 1.5rem; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 .b-back { background: rgba(240,234,214,0.15); border: 1px solid rgba(240,234,214,0.3); color: var(--cream); padding: 7px 14px; border-radius: 7px; font-size: 13px; cursor: pointer; font-family: 'Tajawal', sans-serif; }
 .b-back:hover { background: rgba(240,234,214,0.25); }
@@ -73,8 +67,6 @@ body { font-family: 'Tajawal', sans-serif; direction: rtl; background: var(--cre
 .month-pill { background: rgba(240,234,214,0.15); color: var(--cream); padding: 5px 12px; border-radius: 20px; font-size: 12px; }
 .report-pill { background: var(--cream); color: var(--brown-dark); padding: 7px 14px; border-radius: 7px; font-size: 13px; font-weight: 700; cursor: pointer; border: none; font-family: 'Tajawal', sans-serif; }
 .report-pill:hover { background: var(--cream-dark); }
-
-/* BUILDING CONTENT */
 .b-content { padding: 1.5rem; max-width: 960px; margin: 0 auto; }
 .stats-strip { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 1.5rem; }
 .s-card { background: var(--white); border: 1px solid var(--cream-dark); border-radius: 10px; padding: 1rem; text-align: center; }
@@ -83,8 +75,6 @@ body { font-family: 'Tajawal', sans-serif; direction: rtl; background: var(--cre
 .search-wrap { margin-bottom: 1.25rem; }
 .search-wrap input { width: 100%; padding: 10px 14px; border: 1.5px solid var(--cream-dark); border-radius: 8px; font-size: 14px; background: var(--white); color: var(--text-dark); font-family: 'Tajawal', sans-serif; }
 .search-wrap input:focus { outline: none; border-color: var(--brown); }
-
-/* UNIT CARDS */
 .units-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(165px,1fr)); gap: 10px; }
 .u-card { border-radius: 10px; padding: 1rem; border: 1.5px solid transparent; position: relative; }
 .u-card.occupied { background: #FDF6F3; border-color: var(--brown-light); }
@@ -132,8 +122,6 @@ body { font-family: 'Tajawal', sans-serif; direction: rtl; background: var(--cre
 .maint-type-tag { display: inline-block; font-size: 11px; padding: 2px 8px; background: #F5D5CF; color: #7A2E1E; border-radius: 20px; margin-bottom: 6px; font-weight: 700; }
 .close-maint-btn { margin-top: 10px; width: 100%; padding: 9px; background: #C0392B; color: #fff; border: none; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: 'Tajawal', sans-serif; }
 .close-maint-btn:hover { background: #922B21; }
-
-/* REPORT */
 .report-big { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1.25rem; }
 .r-big { background: var(--cream); border-radius: 10px; padding: 1rem; text-align: center; }
 .r-big .rn { font-size: 22px; font-weight: 700; }
@@ -147,31 +135,22 @@ body { font-family: 'Tajawal', sans-serif; direction: rtl; background: var(--cre
 </head>
 <body>
 
-      <h1>إدارة أملاك شذى الأثير</h1>
-      <p>نظام إدارة العمارات والمستأجرين</p>
-    </div>
-    <div class="role-btns">
-      <button class="btn-owner" onclick="setScreen('ownerLoginScreen')">دخول المالك</button>
-      <button class="btn-tenant" onclick="window.location.href='maintenance.html'">تقديم طلب صيانة</button>
-    </div>
-  </div>
-</div>
-
-<div id="ownerLoginScreen" class="screen active">
+<!-- تسجيل الدخول -->
+<div id="loginScreen" class="screen active">
   <div class="login-card">
     <div class="login-header">
       <div class="mini-logo">ش</div>
-      <h2>لوحة الإدارة</h2>
-      <p>إدارة أملاك شذى الأثير</p>
+      <h2>إدارة أملاك شذى الأثير</h2>
+      <p>لوحة تحكم المالك</p>
     </div>
     <div class="field"><label>اسم المستخدم</label><input id="ownerUser" type="text" placeholder="admin"></div>
     <div class="field"><label>كلمة المرور</label><input id="ownerPass" type="password" placeholder="••••••••"></div>
     <div id="ownerError" class="error-box">بيانات خاطئة، حاول مرة ثانية</div>
     <button class="btn-main" onclick="doOwnerLogin()">دخول</button>
-    <div class="back-link"><span onclick="showRole()">→ رجوع</span></div>
   </div>
 </div>
 
+<!-- الرئيسية -->
 <div id="homeScreen" class="screen">
   <div class="top-bar">
     <div class="brand">
@@ -186,6 +165,7 @@ body { font-family: 'Tajawal', sans-serif; direction: rtl; background: var(--cre
   </div>
 </div>
 
+<!-- شاشة الشقق -->
 <div id="buildingScreen" class="screen">
   <div class="b-header">
     <button class="b-back" onclick="goHome()">→ رجوع</button>
@@ -204,6 +184,7 @@ body { font-family: 'Tajawal', sans-serif; direction: rtl; background: var(--cre
   </div>
 </div>
 
+<!-- مودال التفاصيل -->
 <div id="viewModal" class="modal-bg">
   <div class="modal">
     <div id="vmBadge" class="modal-badge"></div>
@@ -217,6 +198,7 @@ body { font-family: 'Tajawal', sans-serif; direction: rtl; background: var(--cre
   </div>
 </div>
 
+<!-- مودال إضافة/تعديل -->
 <div id="addModal" class="modal-bg">
   <div class="modal">
     <div id="amBadge" class="modal-badge"></div>
@@ -233,6 +215,7 @@ body { font-family: 'Tajawal', sans-serif; direction: rtl; background: var(--cre
   </div>
 </div>
 
+<!-- مودال التقرير -->
 <div id="reportModal" class="modal-bg">
   <div class="modal" style="max-width:430px;">
     <h3 id="reportTitle">التحليل الشهري</h3>
@@ -252,16 +235,21 @@ const monthNames = ["يناير","فبراير","مارس","أبريل","ماي�
 const currentMonthName = `${monthNames[NOW.getMonth()]} ${NOW.getFullYear()}`;
 let buildings=[], units=[], currentBuilding=null, selectedUnit=null;
 
-function setScreen(id) { document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
-function showRole() { setScreen('ownerLoginScreen'); }
+function setScreen(id) {
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
 
 function doOwnerLogin() {
-  const u=document.getElementById('ownerUser').value, p=document.getElementById('ownerPass').value;
+  const u=document.getElementById('ownerUser').value.trim();
+  const p=document.getElementById('ownerPass').value.trim();
   document.getElementById('ownerError').style.display='none';
   if(u!==OWNER_USER||p!==OWNER_PASS){document.getElementById('ownerError').style.display='block';return;}
   setScreen('homeScreen'); loadBuildings();
 }
-function doLogout(){showRole();}
+
+function doLogout(){ setScreen('loginScreen'); }
+
 async function loadBuildings(){
   const{data}=await sb.from('buildings').select('*').order('id');
   buildings=data||[];
@@ -272,6 +260,7 @@ async function loadBuildings(){
       <span class="b-count">${b.total_units} شقة</span>
     </div>`).join('');
 }
+
 async function openBuilding(bId){
   currentBuilding=buildings.find(b=>b.id===bId);
   document.getElementById('bTitle').textContent=currentBuilding.name;
@@ -285,7 +274,9 @@ async function openBuilding(bId){
   units=(uData||[]).map(u=>({...u,paid:(pData||[]).some(p=>p.unit_id===u.id),maintenance:(mData||[]).find(m=>m.unit_id===u.id)||null}));
   renderUnits();
 }
+
 function goHome(){setScreen('homeScreen');}
+
 function renderUnits(){
   const q=document.getElementById('searchInput').value.toLowerCase();
   const filtered=units.filter(u=>u.unit_number.includes(q)||(u.tenant_name||'').toLowerCase().includes(q));
@@ -319,18 +310,21 @@ function renderUnits(){
     }
   }).join('');
 }
+
 async function togglePay(uid){
   const u=units.find(x=>x.id===uid);if(!u)return;
   if(u.paid){await sb.from('payments').delete().eq('unit_id',uid).eq('month_key',currentMonthKey);u.paid=false;}
   else{await sb.from('payments').insert({unit_id:uid,month_key:currentMonthKey,amount:Math.round((u.annual_rent||0)/12)});u.paid=true;}
   renderUnits();
 }
+
 async function closeMaint(mId,e){
   e.stopPropagation();
   await sb.from('maintenance_requests').update({status:'closed'}).eq('id',mId);
   const u=units.find(x=>x.maintenance&&x.maintenance.id===mId);
   if(u)u.maintenance=null; renderUnits();
 }
+
 function viewUnit(uid){
   const u=units.find(x=>x.id===uid);if(!u)return;
   selectedUnit=u;
@@ -352,12 +346,15 @@ function viewUnit(uid){
   `;
   document.getElementById('viewModal').classList.add('open');
 }
+
 async function closeMaintFromModal(){
   if(!selectedUnit?.maintenance)return;
   await sb.from('maintenance_requests').update({status:'closed'}).eq('id',selectedUnit.maintenance.id);
   selectedUnit.maintenance=null; closeModal('viewModal'); renderUnits();
 }
+
 function switchToEdit(){closeModal('viewModal');if(selectedUnit)openAddModal(selectedUnit.id,true);}
+
 function openAddModal(uid,isEdit){
   const u=units.find(x=>x.id===uid);if(!u)return;
   selectedUnit=u;
@@ -370,6 +367,7 @@ function openAddModal(uid,isEdit){
   document.getElementById('fRent').value=u.annual_rent||'';
   document.getElementById('addModal').classList.add('open');
 }
+
 async function saveUnit(){
   if(!selectedUnit)return;
   const name=document.getElementById('fName').value.trim();
@@ -378,6 +376,7 @@ async function saveUnit(){
   await sb.from('units').update(data).eq('id',selectedUnit.id);
   Object.assign(selectedUnit,data); closeModal('addModal'); renderUnits();
 }
+
 async function vacateUnit(){
   if(!selectedUnit||!confirm('هل أنت متأكد من إخلاء هذه الشقة؟'))return;
   const data={tenant_name:null,tenant_phone:null,contract_start:null,contract_end:null,annual_rent:0,status:'empty'};
@@ -385,6 +384,7 @@ async function vacateUnit(){
   Object.assign(selectedUnit,data,{paid:false,maintenance:null});
   closeModal('viewModal'); renderUnits();
 }
+
 function openReport(){
   const occ=units.filter(u=>u.status==='occupied');
   const paidU=occ.filter(u=>u.paid), unpaidU=occ.filter(u=>!u.paid), maintU=occ.filter(u=>u.maintenance);
@@ -409,6 +409,7 @@ function openReport(){
   `;
   document.getElementById('reportModal').classList.add('open');
 }
+
 function closeModal(id){document.getElementById(id).classList.remove('open');}
 </script>
 </body>
