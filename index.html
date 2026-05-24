@@ -146,7 +146,7 @@ body { font-family: 'Tajawal', sans-serif; direction: rtl; background: var(--bro
     <div class="field"><label>اسم المستخدم</label><input id="ownerUser" type="text" placeholder="admin"></div>
     <div class="field"><label>كلمة المرور</label><input id="ownerPass" type="password" placeholder="••••••••"></div>
     <div id="ownerError" class="error-box">بيانات خاطئة، حاول مرة ثانية</div>
-    <button class="btn-main" onclick="doOwnerLogin()">دخول</button>
+   <button class="btn-main" id="loginBtn">دخول</button>
   </div>
 </div>
 
@@ -234,7 +234,9 @@ const currentMonthKey = `${NOW.getFullYear()}-${String(NOW.getMonth()+1).padStar
 const monthNames = ["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];
 const currentMonthName = `${monthNames[NOW.getMonth()]} ${NOW.getFullYear()}`;
 let buildings=[], units=[], currentBuilding=null, selectedUnit=null;
-
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('loginBtn').addEventListener('click', doOwnerLogin);
+});
 function setScreen(id) {
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
