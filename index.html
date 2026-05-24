@@ -18,19 +18,7 @@ body { font-family: 'Tajawal', sans-serif; direction: rtl; background: var(--cre
 .screen { display: none; min-height: 100vh; }
 .screen.active { display: block; }
 
-/* ROLE SCREEN */
-#roleScreen { background: var(--brown); display: flex; align-items: center; justify-content: center; padding: 2rem; }
-#roleScreen.active { display: flex; }
-.role-card { text-align: center; width: 100%; max-width: 360px; }
-.role-logo { margin-bottom: 3rem; }
-.logo-s { width: 80px; height: 80px; background: var(--cream); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; font-size: 36px; font-weight: 700; color: var(--brown); }
-.role-logo h1 { font-size: 22px; font-weight: 700; color: var(--cream); }
-.role-logo p { font-size: 14px; color: var(--cream-darker); margin-top: 6px; }
-.role-btns { display: flex; flex-direction: column; gap: 12px; }
-.btn-owner { padding: 14px; background: var(--cream); color: var(--brown-dark); border: none; border-radius: 10px; font-size: 16px; font-weight: 700; cursor: pointer; font-family: 'Tajawal', sans-serif; }
-.btn-owner:hover { background: var(--cream-dark); }
-.btn-tenant { padding: 14px; background: transparent; color: var(--cream); border: 1.5px solid rgba(240,234,214,0.4); border-radius: 10px; font-size: 16px; font-weight: 500; cursor: pointer; font-family: 'Tajawal', sans-serif; }
-.btn-tenant:hover { border-color: var(--cream); }
+
 
 /* LOGIN */
 #ownerLoginScreen { background: var(--brown); display: flex; align-items: center; justify-content: center; padding: 2rem; }
@@ -159,10 +147,6 @@ body { font-family: 'Tajawal', sans-serif; direction: rtl; background: var(--cre
 </head>
 <body>
 
-<div id="roleScreen" class="screen active">
-  <div class="role-card">
-    <div class="role-logo">
-      <div class="logo-s">ش</div>
       <h1>إدارة أملاك شذى الأثير</h1>
       <p>نظام إدارة العمارات والمستأجرين</p>
     </div>
@@ -173,7 +157,7 @@ body { font-family: 'Tajawal', sans-serif; direction: rtl; background: var(--cre
   </div>
 </div>
 
-<div id="ownerLoginScreen" class="screen">
+<div id="ownerLoginScreen" class="screen active">
   <div class="login-card">
     <div class="login-header">
       <div class="mini-logo">ش</div>
@@ -269,8 +253,8 @@ const currentMonthName = `${monthNames[NOW.getMonth()]} ${NOW.getFullYear()}`;
 let buildings=[], units=[], currentBuilding=null, selectedUnit=null;
 
 function setScreen(id) { document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
-function showRole() { setScreen('roleScreen'); }
-function showOwnerLogin() { setScreen('ownerLoginScreen'); }
+function showRole() { setScreen('ownerLoginScreen'); }
+
 function doOwnerLogin() {
   const u=document.getElementById('ownerUser').value, p=document.getElementById('ownerPass').value;
   document.getElementById('ownerError').style.display='none';
