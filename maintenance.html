@@ -4,144 +4,141 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>شذى الأثير — طلب صيانة</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
+:root {
+  --brown: #9B3D2B; --brown-dark: #7A2E1E;
+  --cream: #F0EAD6; --cream-dark: #E2D8C0; --cream-darker: #C9BC9F;
+  --text-dark: #2C1A14; --text-mid: #6B4035; --text-light: #9B7060;
+  --white: #FFFDF8;
+}
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Segoe UI', Tahoma, sans-serif; direction: rtl; background: #F5F5F0; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1.5rem; }
-.card { background: #fff; border: 0.5px solid #E0E0D8; border-radius: 12px; padding: 2rem 1.75rem; width: 100%; max-width: 360px; }
-.logo { text-align: center; margin-bottom: 1.75rem; }
-.logo .icon { font-size: 32px; margin-bottom: 8px; }
-.logo h1 { font-size: 20px; font-weight: 600; color: #1A1A18; }
-.logo p { font-size: 13px; color: #6B6B63; margin-top: 4px; }
-.field { margin-bottom: 14px; }
-.field label { font-size: 13px; color: #6B6B63; display: block; margin-bottom: 5px; }
-.field input, .field select, .field textarea { width: 100%; padding: 9px 12px; border: 0.5px solid #E0E0D8; border-radius: 8px; font-size: 14px; background: #fff; font-family: inherit; color: #1A1A18; }
-.field textarea { resize: none; height: 90px; }
-.btn { width: 100%; padding: 11px; background: #1D9E75; color: #fff; border: none; border-radius: 8px; font-size: 15px; font-weight: 500; cursor: pointer; font-family: inherit; }
-.btn:hover { background: #0F6E56; }
-.btn:disabled { background: #B4B2A9; cursor: not-allowed; }
-.otp-input { width: 100%; text-align: center; font-size: 28px; font-weight: 600; letter-spacing: 10px; padding: 12px; border: 0.5px solid #E0E0D8; border-radius: 8px; background: #fff; font-family: inherit; }
-.hint { font-size: 13px; color: #6B6B63; text-align: center; margin-bottom: 16px; line-height: 1.6; }
-.error { font-size: 13px; color: #A32D2D; margin-bottom: 12px; display: none; background: #FCEBEB; padding: 8px 12px; border-radius: 8px; }
-.resend { text-align: center; margin-top: 12px; font-size: 13px; color: #6B6B63; }
-.resend span { color: #1D9E75; cursor: pointer; font-weight: 500; }
-.success { text-align: center; }
-.success .circle { width: 64px; height: 64px; background: #E1F5EE; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 30px; }
-.success h2 { font-size: 18px; font-weight: 600; margin-bottom: 8px; color: #1A1A18; }
-.success p { font-size: 13px; color: #6B6B63; line-height: 1.6; }
+body { font-family: 'Tajawal', sans-serif; direction: rtl; background: var(--brown); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1.5rem; }
+.card { background: var(--white); border-radius: 16px; width: 100%; max-width: 380px; overflow: hidden; box-shadow: 0 20px 60px rgba(44,26,20,0.3); }
+.card-header { background: var(--brown); padding: 2rem 1.75rem 1.75rem; text-align: center; }
+.logo-mark { width: 56px; height: 56px; background: var(--cream); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 24px; font-weight: 700; color: var(--brown); }
+.card-header h1 { font-size: 20px; font-weight: 700; color: var(--cream); }
+.card-header p { font-size: 13px; color: var(--cream-darker); margin-top: 5px; }
+.card-body { padding: 1.75rem; }
 .step { display: none; }
 .step.active { display: block; }
+.field { margin-bottom: 14px; }
+.field label { font-size: 13px; color: var(--text-mid); display: block; margin-bottom: 6px; font-weight: 500; }
+.field input, .field select, .field textarea { width: 100%; padding: 11px 14px; border: 1.5px solid var(--cream-dark); border-radius: 9px; font-size: 14px; background: var(--white); color: var(--text-dark); font-family: 'Tajawal', sans-serif; transition: border-color 0.15s; }
+.field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--brown); }
+.field textarea { resize: none; height: 90px; }
+.btn { width: 100%; padding: 13px; background: var(--brown); color: var(--cream); border: none; border-radius: 9px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: 'Tajawal', sans-serif; transition: background 0.15s; }
+.btn:hover { background: var(--brown-dark); }
+.error-box { font-size: 13px; color: #7A2E1E; background: #F5D5CF; padding: 9px 12px; border-radius: 8px; margin-bottom: 14px; display: none; }
+.hint { font-size: 13px; color: var(--text-mid); text-align: center; margin-bottom: 16px; line-height: 1.7; }
+.hint strong { color: var(--text-dark); font-weight: 700; }
+.otp-input { width: 100%; text-align: center; font-size: 32px; font-weight: 700; letter-spacing: 12px; padding: 14px; border: 1.5px solid var(--cream-dark); border-radius: 9px; background: var(--white); font-family: 'Tajawal', sans-serif; color: var(--text-dark); margin-bottom: 14px; }
+.otp-input:focus { outline: none; border-color: var(--brown); }
+.resend-row { text-align: center; margin-top: 12px; font-size: 13px; color: var(--text-light); }
+.resend-row span { color: var(--brown); cursor: pointer; font-weight: 700; }
+.success-wrap { text-align: center; padding: 1rem 0; }
+.success-circle { width: 72px; height: 72px; background: var(--cream); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; font-size: 32px; }
+.success-wrap h2 { font-size: 20px; font-weight: 700; color: var(--text-dark); margin-bottom: 8px; }
+.success-wrap p { font-size: 14px; color: var(--text-mid); line-height: 1.7; margin-bottom: 1.5rem; }
+.divider { height: 1px; background: var(--cream-dark); margin: 1.25rem 0; }
+.back-row { text-align: center; margin-top: 12px; font-size: 13px; color: var(--text-light); }
+.back-row a { color: var(--brown); font-weight: 700; text-decoration: none; }
 </style>
 </head>
 <body>
 <div class="card">
-  <div class="logo">
-    <div class="icon">🔧</div>
-    <h1>شذى الأثير</h1>
+  <div class="card-header">
+    <div class="logo-mark">ش</div>
+    <h1>إدارة أملاك شذى الأثير</h1>
     <p>بوابة طلبات الصيانة</p>
   </div>
+  <div class="card-body">
 
-  <!-- الخطوة 1: التحقق -->
-  <div id="step1" class="step active">
-    <div class="field"><label>رقم الشقة</label><input id="tUnit" type="text" placeholder="مثال: 003" maxlength="3"></div>
-    <div class="field"><label>رقم جوالك المسجل</label><input id="tPhone" type="tel" placeholder="05xxxxxxxx"></div>
-    <div id="err1" class="error">رقم الشقة أو الجوال غير صحيح</div>
-    <button class="btn" onclick="doVerify()">إرسال رمز التحقق</button>
-  </div>
-
-  <!-- الخطوة 2: OTP -->
-  <div id="step2" class="step">
-    <p class="hint">أرسلنا رمز التحقق على رقم<br><strong id="maskedPhone" style="color:#1A1A18;"></strong></p>
-    <div class="field"><input class="otp-input" id="tOtp" type="text" placeholder="· · · ·" maxlength="4"></div>
-    <div id="err2" class="error">الرمز غير صحيح، حاول مرة ثانية</div>
-    <button class="btn" onclick="doOtp()">تحقق</button>
-    <div class="resend">لم يصلك الرمز؟ <span onclick="doVerify()">إعادة الإرسال</span></div>
-  </div>
-
-  <!-- الخطوة 3: الطلب -->
-  <div id="step3" class="step">
-    <div class="field"><label>نوع المشكلة</label>
-      <select id="tType">
-        <option value="">اختر نوع المشكلة...</option>
-        <option>سباكة</option>
-        <option>كهرباء</option>
-        <option>تكييف</option>
-        <option>أبواب ونوافذ</option>
-        <option>أخرى</option>
-      </select>
+    <div id="step1" class="step active">
+      <div class="field"><label>رقم الشقة</label><input id="tUnit" type="text" placeholder="مثال: 003" maxlength="3"></div>
+      <div class="field"><label>رقم جوالك المسجل</label><input id="tPhone" type="tel" placeholder="05xxxxxxxx"></div>
+      <div id="err1" class="error-box">رقم الشقة أو الجوال غير صحيح</div>
+      <button class="btn" onclick="doVerify()">إرسال رمز التحقق</button>
+      <div class="back-row"><a href="index.html">→ الرجوع للرئيسية</a></div>
     </div>
-    <div class="field"><label>وصف المشكلة</label><textarea id="tDesc" placeholder="اشرح المشكلة بالتفصيل..."></textarea></div>
-    <div id="err3" class="error">يرجى ملء جميع الحقول</div>
-    <button class="btn" onclick="doSubmit()">إرسال الطلب</button>
-  </div>
 
-  <!-- الخطوة 4: نجاح -->
-  <div id="step4" class="step">
-    <div class="success">
-      <div class="circle">✓</div>
-      <h2>تم إرسال طلبك</h2>
-      <p>سيتواصل معك المالك قريباً لحل المشكلة</p>
-      <button class="btn" style="margin-top:1.5rem;" onclick="reset()">إرسال طلب آخر</button>
+    <div id="step2" class="step">
+      <p class="hint">أرسلنا رمز التحقق على رقم<br><strong id="maskedPhone"></strong></p>
+      <input class="otp-input" id="tOtp" type="text" placeholder="· · · ·" maxlength="4">
+      <div id="err2" class="error-box">الرمز غير صحيح، حاول مرة ثانية</div>
+      <button class="btn" onclick="doOtp()">تحقق</button>
+      <div class="resend-row">لم يصلك الرمز؟ <span onclick="doVerify()">إعادة الإرسال</span></div>
     </div>
+
+    <div id="step3" class="step">
+      <div class="field"><label>نوع المشكلة</label>
+        <select id="tType">
+          <option value="">اختر نوع المشكلة...</option>
+          <option>سباكة</option>
+          <option>كهرباء</option>
+          <option>تكييف</option>
+          <option>أبواب ونوافذ</option>
+          <option>أخرى</option>
+        </select>
+      </div>
+      <div class="field"><label>وصف المشكلة</label><textarea id="tDesc" placeholder="اشرح المشكلة بالتفصيل..."></textarea></div>
+      <div id="err3" class="error-box">يرجى ملء جميع الحقول</div>
+      <button class="btn" onclick="doSubmit()">إرسال الطلب</button>
+    </div>
+
+    <div id="step4" class="step">
+      <div class="success-wrap">
+        <div class="success-circle">✓</div>
+        <h2>تم إرسال طلبك</h2>
+        <p>وصل طلبك للمالك وسيتم التواصل معك قريباً</p>
+        <button class="btn" onclick="reset()">إرسال طلب آخر</button>
+        <div class="back-row"><a href="index.html">→ الرجوع للرئيسية</a></div>
+      </div>
+    </div>
+
   </div>
 </div>
-
 <script>
 const SUPABASE_URL = 'https://nzlqgqsnimfjvhpgpdjv.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im56bHFncXNuaW1manZocGdwZGp2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MzM2ODIsImV4cCI6MjA5MzMwOTY4Mn0.0orAgXL_rJ1enSMN6yMK_CfGqdkQ70NPD9qHcQW3gnM';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+let currentTenant=null, generatedOtp=null;
 
-let currentTenant = null;
-let generatedOtp = null;
+function showStep(n){document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));document.getElementById('step'+n).classList.add('active');}
+function hideErrors(){document.querySelectorAll('.error-box').forEach(e=>e.style.display='none');}
 
-function showStep(n) {
-  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-  document.getElementById('step' + n).classList.add('active');
-}
-
-function hideErrors() {
-  document.querySelectorAll('.error').forEach(e => e.style.display = 'none');
-}
-
-async function doVerify() {
+async function doVerify(){
   hideErrors();
-  const unit = document.getElementById('tUnit').value.trim().padStart(3,'0');
-  const phone = document.getElementById('tPhone').value.trim();
-  if (!unit || !phone) { document.getElementById('err1').style.display = 'block'; document.getElementById('err1').textContent = 'يرجى ملء جميع الحقول'; return; }
-  const { data } = await sb.from('units').select('*').eq('unit_number', unit).eq('tenant_phone', phone).eq('status','occupied');
-  if (!data || data.length === 0) { document.getElementById('err1').style.display = 'block'; document.getElementById('err1').textContent = 'رقم الشقة أو الجوال غير صحيح'; return; }
-  currentTenant = data[0];
-  generatedOtp = Math.floor(1000 + Math.random() * 9000).toString();
-  console.log('OTP التجريبي:', generatedOtp);
-  const masked = phone.slice(0,4) + '****' + phone.slice(-2);
-  document.getElementById('maskedPhone').textContent = masked;
-  document.getElementById('tOtp').value = '';
+  const unit=document.getElementById('tUnit').value.trim().padStart(3,'0');
+  const phone=document.getElementById('tPhone').value.trim();
+  if(!unit||!phone){const e=document.getElementById('err1');e.textContent='يرجى ملء جميع الحقول';e.style.display='block';return;}
+  const{data}=await sb.from('units').select('*').eq('unit_number',unit).eq('tenant_phone',phone).eq('status','occupied');
+  if(!data||data.length===0){document.getElementById('err1').style.display='block';return;}
+  currentTenant=data[0];
+  generatedOtp=Math.floor(1000+Math.random()*9000).toString();
+  console.log('OTP:',generatedOtp);
+  document.getElementById('maskedPhone').textContent=phone.slice(0,4)+'****'+phone.slice(-2);
+  document.getElementById('tOtp').value='';
   showStep(2);
 }
-
-function doOtp() {
+function doOtp(){
   hideErrors();
-  const otp = document.getElementById('tOtp').value.trim();
-  if (otp !== generatedOtp) { document.getElementById('err2').style.display = 'block'; return; }
+  if(document.getElementById('tOtp').value.trim()!==generatedOtp){document.getElementById('err2').style.display='block';return;}
   showStep(3);
 }
-
-async function doSubmit() {
+async function doSubmit(){
   hideErrors();
-  const type = document.getElementById('tType').value;
-  const desc = document.getElementById('tDesc').value.trim();
-  if (!type || !desc) { document.getElementById('err3').style.display = 'block'; return; }
-  await sb.from('maintenance_requests').insert({ unit_id: currentTenant.id, issue_type: type, description: desc, status: 'open' });
+  const type=document.getElementById('tType').value, desc=document.getElementById('tDesc').value.trim();
+  if(!type||!desc){document.getElementById('err3').style.display='block';return;}
+  await sb.from('maintenance_requests').insert({unit_id:currentTenant.id,issue_type:type,description:desc,status:'open'});
   showStep(4);
 }
-
-function reset() {
-  currentTenant = null;
-  generatedOtp = null;
-  ['tUnit','tPhone','tOtp','tDesc'].forEach(id => document.getElementById(id).value = '');
-  document.getElementById('tType').value = '';
-  hideErrors();
-  showStep(1);
+function reset(){
+  currentTenant=null;generatedOtp=null;
+  ['tUnit','tPhone','tOtp','tDesc'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('tType').value='';
+  hideErrors();showStep(1);
 }
 </script>
 </body>
