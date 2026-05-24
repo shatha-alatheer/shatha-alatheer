@@ -3,257 +3,257 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>شذى الأثير</title>
+<title>إدارة أملاك شذى الأثير</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
+:root {
+  --brown: #9B3D2B; --brown-dark: #7A2E1E; --brown-light: #C4614A;
+  --cream: #F0EAD6; --cream-dark: #E2D8C0; --cream-darker: #C9BC9F;
+  --text-dark: #2C1A14; --text-mid: #6B4035; --text-light: #9B7060;
+  --white: #FFFDF8;
+}
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Segoe UI', Tahoma, sans-serif; direction: rtl; background: #F5F5F0; color: #1A1A18; }
-.screen { display: none; padding: 1.5rem; max-width: 900px; margin: 0 auto; }
+body { font-family: 'Tajawal', sans-serif; direction: rtl; background: var(--cream); color: var(--text-dark); min-height: 100vh; }
+.screen { display: none; min-height: 100vh; }
 .screen.active { display: block; }
-.logo { text-align: center; padding: 2rem 0 1.5rem; }
-.logo h1 { font-size: 24px; font-weight: 600; color: #1A1A18; }
-.logo p { font-size: 14px; color: #6B6B63; margin-top: 4px; }
-.buildings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 1.5rem; }
-.building-card { background: #fff; border: 0.5px solid #E0E0D8; border-radius: 12px; padding: 1.5rem; cursor: pointer; text-align: center; transition: border-color 0.15s; }
-.building-card:hover { border-color: #1D9E75; }
-.bicon { width: 52px; height: 52px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; font-size: 22px; }
-.building-card h2 { font-size: 16px; font-weight: 600; }
-.building-card p { font-size: 13px; color: #6B6B63; margin-top: 4px; }
-.badge { display: inline-block; font-size: 12px; padding: 3px 10px; border-radius: 20px; margin-top: 10px; }
-.header-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 1.25rem; border-bottom: 0.5px solid #E0E0D8; padding-bottom: 1rem; flex-wrap: wrap; }
-.back-btn { background: none; border: 0.5px solid #C8C8C0; border-radius: 8px; padding: 6px 12px; font-size: 13px; cursor: pointer; color: #6B6B63; }
-.back-btn:hover { background: #F5F5F0; }
-.building-title { font-size: 17px; font-weight: 600; flex: 1; }
-.report-btn { background: #E6F1FB; color: #0C447C; border: none; padding: 6px 14px; border-radius: 8px; font-size: 13px; cursor: pointer; font-weight: 500; }
-.month-label { font-size: 13px; color: #6B6B63; background: #F5F5F0; padding: 4px 10px; border-radius: 8px; }
-.stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 1.25rem; }
-.stat-card { background: #F5F5F0; border-radius: 10px; padding: 0.75rem 1rem; text-align: center; }
-.stat-card .num { font-size: 20px; font-weight: 600; }
-.stat-card .lbl { font-size: 11px; color: #6B6B63; margin-top: 2px; }
-.search-bar { margin-bottom: 1rem; }
-.search-bar input { width: 100%; padding: 8px 12px; border: 0.5px solid #E0E0D8; border-radius: 8px; font-size: 14px; background: #fff; }
-.units-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
-.unit-card { border-radius: 10px; padding: 0.875rem 1rem; border: 1.5px solid transparent; position: relative; }
-.unit-card.occupied { background: #E1F5EE; border-color: #5DCAA5; }
-.unit-card.occupied.unpaid { background: #FAEEDA; border-color: #EF9F27; }
-.unit-card.occupied.has-maint { border-color: #E24B4A !important; }
-.unit-card.empty { background: #F5F5F0; border: 1.5px dashed #C8C8C0; cursor: pointer; }
-.unit-card.empty:hover { opacity: 0.8; }
-.unit-num { font-size: 12px; font-weight: 500; color: #085041; margin-bottom: 3px; }
-.unit-card.unpaid .unit-num { color: #633806; }
-.unit-card.empty .unit-num { color: #6B6B63; }
-.unit-name { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #085041; }
-.unit-card.unpaid .unit-name { color: #633806; }
-.unit-card.empty .unit-name { color: #6B6B63; font-weight: 400; }
-.unit-rent-small { font-size: 11px; color: #0F6E56; margin-top: 2px; }
-.unit-card.unpaid .unit-rent-small { color: #854F0B; }
-.pay-row { display: flex; align-items: center; gap: 6px; margin-top: 8px; }
-.pay-btn { flex: 1; font-size: 11px; padding: 5px 0; border-radius: 6px; border: none; cursor: pointer; font-weight: 500; }
-.pay-btn.do-pay { background: #1D9E75; color: #fff; }
-.pay-btn.undo-pay { background: #F7C1C1; color: #791F1F; }
-.paid-badge { font-size: 10px; padding: 2px 6px; border-radius: 10px; background: #9FE1CB; color: #04342C; white-space: nowrap; }
-.unpaid-badge { font-size: 10px; padding: 2px 6px; border-radius: 10px; background: #FAC775; color: #412402; white-space: nowrap; }
-.maint-dot { position: absolute; top: 8px; left: 8px; width: 8px; height: 8px; border-radius: 50%; background: #E24B4A; }
-.maint-strip { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; background: #FCEBEB; border-radius: 6px; padding: 5px 8px; }
-.maint-label { font-size: 11px; color: #791F1F; font-weight: 500; }
-.maint-close-btn { font-size: 10px; padding: 3px 8px; background: #E24B4A; color: #fff; border: none; border-radius: 6px; cursor: pointer; }
-.modal-bg { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 100; align-items: center; justify-content: center; padding: 1rem; }
+
+/* ROLE SCREEN */
+#roleScreen { background: var(--brown); display: flex; align-items: center; justify-content: center; padding: 2rem; }
+#roleScreen.active { display: flex; }
+.role-card { text-align: center; width: 100%; max-width: 360px; }
+.role-logo { margin-bottom: 3rem; }
+.logo-s { width: 80px; height: 80px; background: var(--cream); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.25rem; font-size: 36px; font-weight: 700; color: var(--brown); }
+.role-logo h1 { font-size: 22px; font-weight: 700; color: var(--cream); }
+.role-logo p { font-size: 14px; color: var(--cream-darker); margin-top: 6px; }
+.role-btns { display: flex; flex-direction: column; gap: 12px; }
+.btn-owner { padding: 14px; background: var(--cream); color: var(--brown-dark); border: none; border-radius: 10px; font-size: 16px; font-weight: 700; cursor: pointer; font-family: 'Tajawal', sans-serif; }
+.btn-owner:hover { background: var(--cream-dark); }
+.btn-tenant { padding: 14px; background: transparent; color: var(--cream); border: 1.5px solid rgba(240,234,214,0.4); border-radius: 10px; font-size: 16px; font-weight: 500; cursor: pointer; font-family: 'Tajawal', sans-serif; }
+.btn-tenant:hover { border-color: var(--cream); }
+
+/* LOGIN */
+#ownerLoginScreen { background: var(--brown); display: flex; align-items: center; justify-content: center; padding: 2rem; }
+#ownerLoginScreen.active { display: flex; }
+.login-card { background: var(--cream); border-radius: 16px; padding: 2.5rem 2rem; width: 100%; max-width: 340px; }
+.login-header { text-align: center; margin-bottom: 2rem; }
+.mini-logo { width: 48px; height: 48px; background: var(--brown); border-radius: 10px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 20px; font-weight: 700; color: var(--cream); }
+.login-header h2 { font-size: 20px; font-weight: 700; color: var(--text-dark); }
+.login-header p { font-size: 13px; color: var(--text-mid); margin-top: 4px; }
+
+/* FIELDS */
+.field { margin-bottom: 14px; }
+.field label { font-size: 13px; color: var(--text-mid); display: block; margin-bottom: 6px; font-weight: 500; }
+.field input, .field select, .field textarea { width: 100%; padding: 10px 14px; border: 1.5px solid var(--cream-dark); border-radius: 8px; font-size: 14px; background: var(--white); color: var(--text-dark); font-family: 'Tajawal', sans-serif; transition: border-color 0.15s; }
+.field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--brown); }
+.field textarea { resize: none; height: 85px; }
+.btn-main { width: 100%; padding: 12px; background: var(--brown); color: var(--cream); border: none; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: 'Tajawal', sans-serif; transition: background 0.15s; }
+.btn-main:hover { background: var(--brown-dark); }
+.error-box { font-size: 13px; color: #7A2E1E; background: #F5D5CF; padding: 9px 12px; border-radius: 8px; margin-bottom: 12px; display: none; }
+.back-link { text-align: center; margin-top: 1rem; font-size: 13px; color: var(--text-mid); }
+.back-link span { color: var(--brown); cursor: pointer; font-weight: 500; }
+
+/* TOP BAR */
+.top-bar { background: var(--brown); padding: 1rem 1.5rem; display: flex; align-items: center; justify-content: space-between; }
+.brand { display: flex; align-items: center; gap: 12px; }
+.s-mark { width: 36px; height: 36px; background: var(--cream); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; color: var(--brown); }
+.brand h1 { font-size: 16px; font-weight: 700; color: var(--cream); }
+.brand p { font-size: 11px; color: var(--cream-darker); margin-top: 1px; }
+.logout-btn { background: transparent; border: 1px solid rgba(240,234,214,0.3); color: var(--cream-darker); padding: 6px 14px; border-radius: 6px; font-size: 12px; cursor: pointer; font-family: 'Tajawal', sans-serif; }
+.logout-btn:hover { border-color: var(--cream); color: var(--cream); }
+
+/* MAIN CONTENT */
+.main-content { padding: 1.5rem; max-width: 960px; margin: 0 auto; }
+.section-title { font-size: 13px; font-weight: 700; color: var(--text-mid); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1rem; }
+.buildings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.b-card { background: var(--white); border: 1px solid var(--cream-dark); border-radius: 12px; padding: 1.5rem; cursor: pointer; transition: border-color 0.15s, box-shadow 0.15s; position: relative; overflow: hidden; }
+.b-card::before { content: ''; position: absolute; top: 0; right: 0; width: 4px; height: 100%; background: var(--brown); border-radius: 0 12px 12px 0; }
+.b-card:hover { border-color: var(--brown); box-shadow: 0 4px 20px rgba(155,61,43,0.1); }
+.b-card .b-icon { font-size: 28px; margin-bottom: 10px; }
+.b-card h2 { font-size: 17px; font-weight: 700; color: var(--text-dark); }
+.b-card p { font-size: 13px; color: var(--text-mid); margin-top: 3px; }
+.b-count { display: inline-block; background: var(--brown); color: var(--cream); font-size: 12px; padding: 3px 10px; border-radius: 20px; margin-top: 10px; font-weight: 500; }
+.loading-state { text-align: center; padding: 3rem; color: var(--text-mid); font-size: 15px; }
+
+/* BUILDING HEADER */
+.b-header { background: var(--brown); padding: 1rem 1.5rem; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.b-back { background: rgba(240,234,214,0.15); border: 1px solid rgba(240,234,214,0.3); color: var(--cream); padding: 7px 14px; border-radius: 7px; font-size: 13px; cursor: pointer; font-family: 'Tajawal', sans-serif; }
+.b-back:hover { background: rgba(240,234,214,0.25); }
+.b-header-title { flex: 1; }
+.b-header-title h2 { font-size: 17px; font-weight: 700; color: var(--cream); }
+.b-header-title p { font-size: 12px; color: var(--cream-darker); margin-top: 2px; }
+.month-pill { background: rgba(240,234,214,0.15); color: var(--cream); padding: 5px 12px; border-radius: 20px; font-size: 12px; }
+.report-pill { background: var(--cream); color: var(--brown-dark); padding: 7px 14px; border-radius: 7px; font-size: 13px; font-weight: 700; cursor: pointer; border: none; font-family: 'Tajawal', sans-serif; }
+.report-pill:hover { background: var(--cream-dark); }
+
+/* BUILDING CONTENT */
+.b-content { padding: 1.5rem; max-width: 960px; margin: 0 auto; }
+.stats-strip { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 1.5rem; }
+.s-card { background: var(--white); border: 1px solid var(--cream-dark); border-radius: 10px; padding: 1rem; text-align: center; }
+.s-card .s-num { font-size: 22px; font-weight: 700; }
+.s-card .s-lbl { font-size: 11px; color: var(--text-mid); margin-top: 3px; }
+.search-wrap { margin-bottom: 1.25rem; }
+.search-wrap input { width: 100%; padding: 10px 14px; border: 1.5px solid var(--cream-dark); border-radius: 8px; font-size: 14px; background: var(--white); color: var(--text-dark); font-family: 'Tajawal', sans-serif; }
+.search-wrap input:focus { outline: none; border-color: var(--brown); }
+
+/* UNIT CARDS */
+.units-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(165px,1fr)); gap: 10px; }
+.u-card { border-radius: 10px; padding: 1rem; border: 1.5px solid transparent; position: relative; }
+.u-card.occupied { background: #FDF6F3; border-color: var(--brown-light); }
+.u-card.occupied.unpaid { background: #FDF8EE; border-color: #D4A843; }
+.u-card.occupied.has-maint { border-color: #C0392B !important; }
+.u-card.empty { background: var(--white); border: 1.5px dashed var(--cream-darker); cursor: pointer; }
+.u-card.empty:hover { border-color: var(--brown); }
+.u-num { font-size: 11px; font-weight: 700; color: var(--brown); margin-bottom: 4px; }
+.u-card.empty .u-num { color: var(--text-light); }
+.u-name { font-size: 13px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-dark); }
+.u-card.empty .u-name { color: var(--text-light); font-weight: 400; }
+.u-rent { font-size: 11px; color: var(--text-mid); margin-top: 3px; }
+.pay-row { display: flex; align-items: center; gap: 6px; margin-top: 9px; }
+.pay-btn { flex: 1; font-size: 11px; padding: 5px 0; border-radius: 6px; border: none; cursor: pointer; font-weight: 700; font-family: 'Tajawal', sans-serif; }
+.pay-btn.do-pay { background: var(--brown); color: var(--cream); }
+.pay-btn.do-pay:hover { background: var(--brown-dark); }
+.pay-btn.undo-pay { background: #F5D5CF; color: var(--brown-dark); }
+.paid-pill { font-size: 10px; padding: 3px 7px; border-radius: 20px; background: #E8F5E9; color: #2E7D32; white-space: nowrap; font-weight: 700; }
+.unpaid-pill { font-size: 10px; padding: 3px 7px; border-radius: 20px; background: #FFF8E1; color: #F57F17; white-space: nowrap; font-weight: 700; }
+.maint-dot { position: absolute; top: 8px; left: 8px; width: 8px; height: 8px; border-radius: 50%; background: #C0392B; }
+.maint-strip { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; background: #FDECEC; border-radius: 6px; padding: 5px 8px; }
+.maint-lbl { font-size: 11px; color: #922B21; font-weight: 700; }
+.maint-close { font-size: 10px; padding: 3px 8px; background: #C0392B; color: #fff; border: none; border-radius: 5px; cursor: pointer; font-family: 'Tajawal', sans-serif; }
+.empty-hint { font-size: 11px; color: var(--text-light); margin-top: 6px; }
+
+/* MODALS */
+.modal-bg { display: none; position: fixed; inset: 0; background: rgba(44,26,20,0.55); z-index: 200; align-items: center; justify-content: center; padding: 1rem; }
 .modal-bg.open { display: flex; }
-.modal { background: #fff; border-radius: 12px; border: 0.5px solid #E0E0D8; padding: 1.5rem; width: 100%; max-width: 380px; max-height: 90vh; overflow-y: auto; }
-.modal h3 { font-size: 16px; font-weight: 600; margin-bottom: 1rem; }
-.field { margin-bottom: 11px; }
-.field label { font-size: 13px; color: #6B6B63; display: block; margin-bottom: 4px; }
-.field input, .field select, .field textarea { width: 100%; padding: 8px 10px; border: 0.5px solid #E0E0D8; border-radius: 8px; font-size: 14px; background: #fff; font-family: inherit; }
-.field textarea { resize: none; height: 80px; }
-.modal-actions { display: flex; gap: 8px; margin-top: 1rem; justify-content: flex-end; }
-.btn-primary { background: #E1F5EE; color: #085041; border: none; padding: 8px 18px; border-radius: 8px; font-size: 14px; cursor: pointer; font-weight: 500; }
-.btn-primary:hover { background: #9FE1CB; }
-.btn-cancel { background: none; border: 0.5px solid #C8C8C0; color: #6B6B63; padding: 8px 14px; border-radius: 8px; font-size: 14px; cursor: pointer; }
-.btn-danger { background: #FCEBEB; color: #791F1F; border: none; padding: 8px 14px; border-radius: 8px; font-size: 14px; cursor: pointer; }
-.detail-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 0.5px solid #E0E0D8; font-size: 14px; }
+.modal { background: var(--white); border-radius: 14px; border: 1px solid var(--cream-dark); padding: 1.75rem; width: 100%; max-width: 390px; max-height: 90vh; overflow-y: auto; }
+.modal-badge { display: inline-block; background: var(--brown); color: var(--cream); border-radius: 6px; padding: 3px 10px; font-size: 11px; font-weight: 700; margin-bottom: 1rem; }
+.modal h3 { font-size: 18px; font-weight: 700; color: var(--text-dark); margin-bottom: 1.25rem; }
+.detail-row { display: flex; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid var(--cream-dark); font-size: 14px; }
 .detail-row:last-child { border-bottom: none; }
-.detail-row .dk { color: #6B6B63; }
-.detail-row .dv { font-weight: 500; }
-.modal-badge { display: inline-block; background: #F5F5F0; border-radius: 8px; padding: 3px 10px; font-size: 12px; color: #6B6B63; margin-bottom: 1rem; }
-.maint-section { margin-top: 1rem; padding-top: 1rem; border-top: 0.5px solid #E0E0D8; }
-.maint-section-title { font-size: 13px; font-weight: 600; color: #A32D2D; margin-bottom: 8px; }
-.maint-detail-box { background: #FCEBEB; border-radius: 8px; padding: 10px 12px; font-size: 13px; color: #501313; line-height: 1.6; }
-.maint-type-badge { display: inline-block; font-size: 11px; padding: 2px 8px; background: #F7C1C1; color: #791F1F; border-radius: 10px; margin-bottom: 6px; }
-.report-big { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
-.rbig { background: #F5F5F0; border-radius: 10px; padding: 1rem; text-align: center; }
-.rbig .rnum { font-size: 22px; font-weight: 600; }
-.rbig .rlbl { font-size: 12px; color: #6B6B63; margin-top: 3px; }
-.progress-bar-wrap { background: #F5F5F0; border-radius: 6px; height: 10px; overflow: hidden; margin-top: 4px; }
-.progress-bar-fill { height: 100%; border-radius: 6px; }
-.report-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 0.5px solid #E0E0D8; font-size: 13px; }
-.report-row:last-child { border-bottom: none; }
-.loading { text-align: center; padding: 3rem; color: #6B6B63; font-size: 15px; }
+.detail-row .dk { color: var(--text-mid); }
+.detail-row .dv { font-weight: 700; color: var(--text-dark); }
+.modal-actions { display: flex; gap: 8px; margin-top: 1.25rem; justify-content: flex-end; }
+.btn-modal-primary { background: var(--brown); color: var(--cream); border: none; padding: 9px 20px; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; font-family: 'Tajawal', sans-serif; }
+.btn-modal-primary:hover { background: var(--brown-dark); }
+.btn-modal-cancel { background: none; border: 1.5px solid var(--cream-dark); color: var(--text-mid); padding: 9px 16px; border-radius: 8px; font-size: 14px; cursor: pointer; font-family: 'Tajawal', sans-serif; }
+.btn-modal-cancel:hover { background: var(--cream); }
+.btn-modal-danger { background: #F5D5CF; color: #7A2E1E; border: none; padding: 9px 16px; border-radius: 8px; font-size: 14px; cursor: pointer; font-family: 'Tajawal', sans-serif; }
+.maint-modal-section { margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px solid var(--cream-dark); }
+.maint-modal-title { font-size: 13px; font-weight: 700; color: #922B21; margin-bottom: 8px; }
+.maint-box { background: #FDECEC; border-radius: 8px; padding: 12px; font-size: 13px; color: #5D1F1A; line-height: 1.7; }
+.maint-type-tag { display: inline-block; font-size: 11px; padding: 2px 8px; background: #F5D5CF; color: #7A2E1E; border-radius: 20px; margin-bottom: 6px; font-weight: 700; }
+.close-maint-btn { margin-top: 10px; width: 100%; padding: 9px; background: #C0392B; color: #fff; border: none; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: 'Tajawal', sans-serif; }
+.close-maint-btn:hover { background: #922B21; }
 
-/* بوابة المستأجر */
-.tenant-wrap { background: #F5F5F0; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1.5rem; }
-.tenant-card { background: #fff; border: 0.5px solid #E0E0D8; border-radius: 12px; padding: 2rem 1.75rem; width: 100%; max-width: 360px; }
-.tenant-logo { text-align: center; margin-bottom: 1.75rem; }
-.tenant-logo h1 { font-size: 20px; font-weight: 600; }
-.tenant-logo p { font-size: 13px; color: #6B6B63; margin-top: 4px; }
-.btn-main { width: 100%; padding: 10px; background: #1D9E75; color: #fff; border: none; border-radius: 8px; font-size: 15px; font-weight: 500; cursor: pointer; font-family: inherit; }
-.btn-main:hover { background: #0F6E56; }
-.otp-input { width: 100%; text-align: center; font-size: 28px; font-weight: 600; letter-spacing: 8px; padding: 10px; border: 0.5px solid #E0E0D8; border-radius: 8px; }
-.hint { font-size: 12px; color: #6B6B63; text-align: center; margin-bottom: 14px; }
-.success-wrap { text-align: center; }
-.success-circle { width: 60px; height: 60px; background: #E1F5EE; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 28px; }
-.error-msg { font-size: 13px; color: #A32D2D; margin-bottom: 12px; display: none; }
-.switch-link { text-align: center; margin-top: 1.25rem; font-size: 13px; color: #6B6B63; }
-.switch-link span { color: #1D9E75; cursor: pointer; font-weight: 500; }
-
-/* لوحة دخول المالك */
-.owner-login-wrap { background: #F5F5F0; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 1.5rem; }
+/* REPORT */
+.report-big { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1.25rem; }
+.r-big { background: var(--cream); border-radius: 10px; padding: 1rem; text-align: center; }
+.r-big .rn { font-size: 22px; font-weight: 700; }
+.r-big .rl { font-size: 12px; color: var(--text-mid); margin-top: 3px; }
+.prog-wrap { background: var(--cream); border-radius: 6px; height: 10px; overflow: hidden; margin-top: 5px; }
+.prog-fill { height: 100%; border-radius: 6px; }
+.r-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid var(--cream-dark); font-size: 13px; }
+.r-row:last-child { border-bottom: none; }
+.r-sect { font-size: 12px; font-weight: 700; color: var(--text-mid); text-transform: uppercase; letter-spacing: 0.5px; margin: 1rem 0 6px; }
 </style>
 </head>
 <body>
 
-<!-- شاشة اختيار الدور -->
-<div id="roleScreen" style="background:#F5F5F0;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1.5rem;">
-  <div style="background:#fff;border:0.5px solid #E0E0D8;border-radius:12px;padding:2rem;width:100%;max-width:340px;text-align:center;">
-    <div style="font-size:32px;margin-bottom:12px;">🏢</div>
-    <h1 style="font-size:20px;font-weight:600;margin-bottom:6px;">شذى الأثير</h1>
-    <p style="font-size:13px;color:#6B6B63;margin-bottom:2rem;">اختر طريقة الدخول</p>
-    <button class="btn-main" style="margin-bottom:10px;" onclick="showOwnerLogin()">دخول المالك</button>
-    <button class="btn-main" style="background:#F5F5F0;color:#1A1A18;border:0.5px solid #E0E0D8;" onclick="showTenant()">تقديم طلب صيانة</button>
+<div id="roleScreen" class="screen active">
+  <div class="role-card">
+    <div class="role-logo">
+      <div class="logo-s">ش</div>
+      <h1>إدارة أملاك شذى الأثير</h1>
+      <p>نظام إدارة العمارات والمستأجرين</p>
+    </div>
+    <div class="role-btns">
+      <button class="btn-owner" onclick="showOwnerLogin()">دخول المالك</button>
+      <button class="btn-tenant" onclick="window.location.href='maintenance.html'">تقديم طلب صيانة</button>
+    </div>
   </div>
 </div>
 
-<!-- لوحة دخول المالك -->
-<div id="ownerLoginScreen" style="display:none;background:#F5F5F0;min-height:100vh;align-items:center;justify-content:center;padding:1.5rem;">
-  <div style="background:#fff;border:0.5px solid #E0E0D8;border-radius:12px;padding:2rem;width:100%;max-width:340px;">
-    <div style="text-align:center;margin-bottom:1.5rem;">
-      <h1 style="font-size:18px;font-weight:600;">لوحة الإدارة</h1>
-      <p style="font-size:13px;color:#6B6B63;margin-top:4px;">شذى الأثير</p>
+<div id="ownerLoginScreen" class="screen">
+  <div class="login-card">
+    <div class="login-header">
+      <div class="mini-logo">ش</div>
+      <h2>لوحة الإدارة</h2>
+      <p>إدارة أملاك شذى الأثير</p>
     </div>
     <div class="field"><label>اسم المستخدم</label><input id="ownerUser" type="text" placeholder="admin"></div>
     <div class="field"><label>كلمة المرور</label><input id="ownerPass" type="password" placeholder="••••••••"></div>
-    <div id="ownerError" class="error-msg">بيانات خاطئة</div>
+    <div id="ownerError" class="error-box">بيانات خاطئة، حاول مرة ثانية</div>
     <button class="btn-main" onclick="doOwnerLogin()">دخول</button>
-    <div class="switch-link"><span onclick="showRole()">رجوع</span></div>
+    <div class="back-link"><span onclick="showRole()">→ رجوع</span></div>
   </div>
 </div>
 
-<!-- لوحة المالك الرئيسية -->
 <div id="homeScreen" class="screen">
-  <div class="logo">
-    <h1>إدارة العمارات</h1>
-    <p>اختر العمارة للمتابعة</p>
+  <div class="top-bar">
+    <div class="brand">
+      <div class="s-mark">ش</div>
+      <div><h1>إدارة أملاك شذى الأثير</h1><p>لوحة التحكم الرئيسية</p></div>
+    </div>
+    <button class="logout-btn" onclick="doLogout()">خروج</button>
   </div>
-  <div class="buildings-grid" id="buildingsGrid">
-    <div class="loading">جاري التحميل...</div>
-  </div>
-  <div style="text-align:left;margin-top:1rem;">
-    <button onclick="doLogout()" style="background:none;border:none;font-size:13px;color:#6B6B63;cursor:pointer;">خروج</button>
+  <div class="main-content">
+    <div class="section-title">العمارات</div>
+    <div class="buildings-grid" id="buildingsGrid"><div class="loading-state">جاري التحميل...</div></div>
   </div>
 </div>
 
-<!-- شاشة الشقق -->
 <div id="buildingScreen" class="screen">
-  <div class="header-bar">
-    <button class="back-btn" onclick="goHome()">→ رجوع</button>
-    <span class="building-title" id="bTitle"></span>
-    <span class="month-label" id="monthLabel"></span>
-    <button class="report-btn" onclick="openReport()">التحليل الشهري</button>
+  <div class="b-header">
+    <button class="b-back" onclick="goHome()">→ رجوع</button>
+    <div class="b-header-title"><h2 id="bTitle"></h2><p id="bSub"></p></div>
+    <span class="month-pill" id="monthLabel"></span>
+    <button class="report-pill" onclick="openReport()">التحليل الشهري</button>
   </div>
-  <div class="stats-row">
-    <div class="stat-card"><div class="num" id="sTotalUnits">0</div><div class="lbl">إجمالي الشقق</div></div>
-    <div class="stat-card"><div class="num" id="sOccupied" style="color:#1D9E75;">0</div><div class="lbl">مؤجرة</div></div>
-    <div class="stat-card"><div class="num" id="sPaid" style="color:#EF9F27;">0</div><div class="lbl">دفعوا هذا الشهر</div></div>
-  </div>
-  <div class="search-bar">
-    <input type="text" id="searchInput" placeholder="ابحث باسم المستأجر أو رقم الشقة..." oninput="renderUnits()">
-  </div>
-  <div class="units-grid" id="unitsGrid"></div>
-</div>
-
-<!-- بوابة المستأجر -->
-<div id="tenantScreen" style="display:none;background:#F5F5F0;min-height:100vh;align-items:center;justify-content:center;padding:1.5rem;">
-  <div class="tenant-card">
-    <div class="tenant-logo">
-      <div style="font-size:28px;margin-bottom:8px;">🔧</div>
-      <h1>شذى الأثير</h1>
-      <p>بوابة طلبات الصيانة</p>
+  <div class="b-content">
+    <div class="stats-strip">
+      <div class="s-card"><div class="s-num" id="sTotalUnits">0</div><div class="s-lbl">إجمالي الشقق</div></div>
+      <div class="s-card"><div class="s-num" id="sOccupied" style="color:var(--brown);">0</div><div class="s-lbl">مؤجرة</div></div>
+      <div class="s-card"><div class="s-num" id="sPaid" style="color:#D4A843;">0</div><div class="s-lbl">دفعوا هذا الشهر</div></div>
     </div>
-    <div id="tStep1">
-      <div class="field"><label>رقم الشقة</label><input id="tUnit" type="text" placeholder="مثال: 003" maxlength="3"></div>
-      <div class="field"><label>رقم جوالك المسجل</label><input id="tPhone" type="tel" placeholder="05xxxxxxxx"></div>
-      <div id="tError1" class="error-msg">رقم الشقة أو الجوال غير صحيح</div>
-      <button class="btn-main" onclick="doTenantVerify()">إرسال رمز التحقق</button>
-      <div class="switch-link"><span onclick="showRole()">رجوع</span></div>
-    </div>
-    <div id="tStep2" style="display:none;">
-      <p class="hint">أرسلنا رمز التحقق — الرمز التجريبي: <strong>1234</strong></p>
-      <div class="field"><input class="otp-input" id="tOtp" type="text" placeholder="1234" maxlength="4"></div>
-      <div id="tError2" class="error-msg">الرمز غير صحيح</div>
-      <button class="btn-main" onclick="doTenantOtp()">تحقق</button>
-    </div>
-    <div id="tStep3" style="display:none;">
-      <div class="field"><label>نوع المشكلة</label>
-        <select id="tIssueType">
-          <option value="">اختر...</option>
-          <option>سباكة</option>
-          <option>كهرباء</option>
-          <option>تكييف</option>
-          <option>أبواب ونوافذ</option>
-          <option>أخرى</option>
-        </select>
-      </div>
-      <div class="field"><label>وصف المشكلة</label><textarea id="tIssueDesc" placeholder="اشرح المشكلة..."></textarea></div>
-      <div id="tError3" class="error-msg">يرجى ملء جميع الحقول</div>
-      <button class="btn-main" onclick="doSubmitMaint()">إرسال الطلب</button>
-    </div>
-    <div id="tStep4" style="display:none;" class="success-wrap">
-      <div class="success-circle">✓</div>
-      <h3 style="font-size:16px;font-weight:600;margin-bottom:8px;">تم إرسال طلبك</h3>
-      <p style="font-size:13px;color:#6B6B63;">سيتواصل معك المالك قريباً</p>
-      <button class="btn-main" style="margin-top:1.25rem;" onclick="resetTenant()">إرسال طلب آخر</button>
-    </div>
+    <div class="search-wrap"><input type="text" id="searchInput" placeholder="ابحث باسم المستأجر أو رقم الشقة..." oninput="renderUnits()"></div>
+    <div class="units-grid" id="unitsGrid"></div>
   </div>
 </div>
 
-<!-- مودال تفاصيل الشقة -->
 <div id="viewModal" class="modal-bg">
   <div class="modal">
     <div id="vmBadge" class="modal-badge"></div>
     <h3 id="vmTitle"></h3>
     <div id="vmContent"></div>
     <div class="modal-actions">
-      <button class="btn-danger" onclick="vacateUnit()">إخلاء</button>
-      <button class="btn-cancel" onclick="closeModal('viewModal')">إغلاق</button>
-      <button class="btn-primary" onclick="switchToEdit()">تعديل</button>
+      <button class="btn-modal-danger" onclick="vacateUnit()">إخلاء</button>
+      <button class="btn-modal-cancel" onclick="closeModal('viewModal')">إغلاق</button>
+      <button class="btn-modal-primary" onclick="switchToEdit()">تعديل</button>
     </div>
   </div>
 </div>
 
-<!-- مودال إضافة مستأجر -->
 <div id="addModal" class="modal-bg">
   <div class="modal">
     <div id="amBadge" class="modal-badge"></div>
     <h3 id="amTitle">إضافة مستأجر</h3>
-    <div class="field"><label>اسم المستأجر</label><input id="fName" type="text"></div>
-    <div class="field"><label>رقم الجوال</label><input id="fPhone" type="text"></div>
+    <div class="field"><label>اسم المستأجر</label><input id="fName" type="text" placeholder="الاسم الكامل"></div>
+    <div class="field"><label>رقم الجوال</label><input id="fPhone" type="text" placeholder="05xxxxxxxx"></div>
     <div class="field"><label>تاريخ بداية العقد</label><input id="fStart" type="date"></div>
     <div class="field"><label>تاريخ نهاية العقد</label><input id="fEnd" type="date"></div>
-    <div class="field"><label>قيمة الإيجار (ريال / سنة)</label><input id="fRent" type="number"></div>
+    <div class="field"><label>قيمة الإيجار (ريال / سنة)</label><input id="fRent" type="number" placeholder="20000"></div>
     <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeModal('addModal')">إلغاء</button>
-      <button class="btn-primary" onclick="saveUnit()">حفظ</button>
+      <button class="btn-modal-cancel" onclick="closeModal('addModal')">إلغاء</button>
+      <button class="btn-modal-primary" onclick="saveUnit()">حفظ</button>
     </div>
   </div>
 </div>
 
-<!-- مودال التقرير -->
 <div id="reportModal" class="modal-bg">
-  <div class="modal" style="max-width:420px;">
+  <div class="modal" style="max-width:430px;">
     <h3 id="reportTitle">التحليل الشهري</h3>
     <div id="reportContent"></div>
-    <div class="modal-actions">
-      <button class="btn-cancel" onclick="closeModal('reportModal')">إغلاق</button>
-    </div>
+    <div class="modal-actions"><button class="btn-modal-cancel" onclick="closeModal('reportModal')">إغلاق</button></div>
   </div>
 </div>
 
@@ -261,325 +261,171 @@ body { font-family: 'Segoe UI', Tahoma, sans-serif; direction: rtl; background: 
 const SUPABASE_URL = 'https://nzlqgqsnimfjvhpgpdjv.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im56bHFncXNuaW1manZocGdwZGp2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MzM2ODIsImV4cCI6MjA5MzMwOTY4Mn0.0orAgXL_rJ1enSMN6yMK_CfGqdkQ70NPD9qHcQW3gnM';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-const OWNER_USER = 'admin';
-const OWNER_PASS = '1234';
-
+const OWNER_USER = 'admin', OWNER_PASS = '1234';
 const NOW = new Date();
 const currentMonthKey = `${NOW.getFullYear()}-${String(NOW.getMonth()+1).padStart(2,'0')}`;
 const monthNames = ["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];
 const currentMonthName = `${monthNames[NOW.getMonth()]} ${NOW.getFullYear()}`;
+let buildings=[], units=[], currentBuilding=null, selectedUnit=null;
 
-let buildings = [];
-let units = [];
-let currentBuilding = null;
-let selectedUnit = null;
-let currentTenant = null;
-
-// ===== التنقل =====
-function showRole() {
-  hideAll();
-  document.getElementById('roleScreen').style.display = 'flex';
-}
-function showOwnerLogin() {
-  hideAll();
-  document.getElementById('ownerLoginScreen').style.display = 'flex';
-}
-function showTenant() {
-  hideAll();
-  document.getElementById('tenantScreen').style.display = 'flex';
-  resetTenant();
-}
-function hideAll() {
-  document.getElementById('roleScreen').style.display = 'none';
-  document.getElementById('ownerLoginScreen').style.display = 'none';
-  document.getElementById('tenantScreen').style.display = 'none';
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-}
-
-// ===== دخول المالك =====
+function setScreen(id) { document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+function showRole() { setScreen('roleScreen'); }
+function showOwnerLogin() { setScreen('ownerLoginScreen'); }
 function doOwnerLogin() {
-  const u = document.getElementById('ownerUser').value;
-  const p = document.getElementById('ownerPass').value;
-  document.getElementById('ownerError').style.display = 'none';
-  if (u !== OWNER_USER || p !== OWNER_PASS) {
-    document.getElementById('ownerError').style.display = 'block';
-    return;
-  }
-  hideAll();
-  document.getElementById('homeScreen').classList.add('active');
-  loadBuildings();
+  const u=document.getElementById('ownerUser').value, p=document.getElementById('ownerPass').value;
+  document.getElementById('ownerError').style.display='none';
+  if(u!==OWNER_USER||p!==OWNER_PASS){document.getElementById('ownerError').style.display='block';return;}
+  setScreen('homeScreen'); loadBuildings();
 }
-function doLogout() { showRole(); }
-
-// ===== تحميل البيانات =====
-async function loadBuildings() {
-  const { data } = await sb.from('buildings').select('*').order('id');
-  buildings = data || [];
-  const grid = document.getElementById('buildingsGrid');
-  const colors = [['#E1F5EE','#085041'],['#E6F1FB','#0C447C']];
-  grid.innerHTML = buildings.map((b,i) => `
-    <div class="building-card" onclick="openBuilding(${b.id})">
-      <div class="bicon" style="background:${colors[i]?.[0]||'#F5F5F0'};">🏢</div>
-      <h2>${b.name}</h2>
-      <p>${b.neighborhood}</p>
-      <span class="badge" style="background:${colors[i]?.[0]||'#F5F5F0'};color:${colors[i]?.[1]||'#333'};">${b.total_units} شقة</span>
-    </div>
-  `).join('');
+function doLogout(){showRole();}
+async function loadBuildings(){
+  const{data}=await sb.from('buildings').select('*').order('id');
+  buildings=data||[];
+  document.getElementById('buildingsGrid').innerHTML=buildings.map((b,i)=>`
+    <div class="b-card" onclick="openBuilding(${b.id})">
+      <div class="b-icon">${i===0?'🏢':'🏗️'}</div>
+      <h2>${b.name}</h2><p>${b.neighborhood}</p>
+      <span class="b-count">${b.total_units} شقة</span>
+    </div>`).join('');
 }
-
-async function openBuilding(bId) {
-  currentBuilding = buildings.find(b => b.id === bId);
-  document.getElementById('bTitle').textContent = `${currentBuilding.name} — ${currentBuilding.neighborhood}`;
-  document.getElementById('monthLabel').textContent = currentMonthName;
-  document.getElementById('searchInput').value = '';
-  hideAll();
-  document.getElementById('buildingScreen').classList.add('active');
-
-  const { data: uData } = await sb.from('units').select('*').eq('building_id', bId).order('unit_number');
-  const { data: pData } = await sb.from('payments').select('*').eq('month_key', currentMonthKey);
-  const { data: mData } = await sb.from('maintenance_requests').select('*').eq('status','open');
-
-  units = (uData||[]).map(u => ({
-    ...u,
-    paid: (pData||[]).some(p => p.unit_id === u.id),
-    maintenance: (mData||[]).find(m => m.unit_id === u.id) || null
-  }));
+async function openBuilding(bId){
+  currentBuilding=buildings.find(b=>b.id===bId);
+  document.getElementById('bTitle').textContent=currentBuilding.name;
+  document.getElementById('bSub').textContent=currentBuilding.neighborhood;
+  document.getElementById('monthLabel').textContent=currentMonthName;
+  document.getElementById('searchInput').value='';
+  setScreen('buildingScreen');
+  const{data:uData}=await sb.from('units').select('*').eq('building_id',bId).order('unit_number');
+  const{data:pData}=await sb.from('payments').select('*').eq('month_key',currentMonthKey);
+  const{data:mData}=await sb.from('maintenance_requests').select('*').eq('status','open');
+  units=(uData||[]).map(u=>({...u,paid:(pData||[]).some(p=>p.unit_id===u.id),maintenance:(mData||[]).find(m=>m.unit_id===u.id)||null}));
   renderUnits();
 }
-
-function goHome() {
-  hideAll();
-  document.getElementById('homeScreen').classList.add('active');
-}
-
-function renderUnits() {
-  const q = document.getElementById('searchInput').value.toLowerCase();
-  const filtered = units.filter(u => u.unit_number.includes(q) || (u.tenant_name||'').toLowerCase().includes(q));
-  const occupied = units.filter(u => u.status === 'occupied').length;
-  const paid = units.filter(u => u.paid).length;
-  document.getElementById('sTotalUnits').textContent = currentBuilding.total_units;
-  document.getElementById('sOccupied').textContent = occupied;
-  document.getElementById('sPaid').textContent = `${paid}/${occupied}`;
-
-  document.getElementById('unitsGrid').innerHTML = filtered.map(u => {
-    if (u.status === 'occupied') {
-      const mr = Math.round((u.annual_rent||0) / 12);
-      const cls = `unit-card occupied${u.paid?'':' unpaid'}${u.maintenance?' has-maint':''}`;
-      return `<div class="${cls}" style="position:relative;">
-        ${u.maintenance ? '<div class="maint-dot"></div>' : ''}
+function goHome(){setScreen('homeScreen');}
+function renderUnits(){
+  const q=document.getElementById('searchInput').value.toLowerCase();
+  const filtered=units.filter(u=>u.unit_number.includes(q)||(u.tenant_name||'').toLowerCase().includes(q));
+  const occupied=units.filter(u=>u.status==='occupied').length;
+  const paid=units.filter(u=>u.paid).length;
+  document.getElementById('sTotalUnits').textContent=currentBuilding.total_units;
+  document.getElementById('sOccupied').textContent=occupied;
+  document.getElementById('sPaid').textContent=`${paid}/${occupied}`;
+  document.getElementById('unitsGrid').innerHTML=filtered.map(u=>{
+    if(u.status==='occupied'){
+      const mr=Math.round((u.annual_rent||0)/12);
+      const cls=`u-card occupied${u.paid?'':' unpaid'}${u.maintenance?' has-maint':''}`;
+      return `<div class="${cls}">
+        ${u.maintenance?'<div class="maint-dot"></div>':''}
         <div style="cursor:pointer;" onclick="viewUnit(${u.id})">
-          <div class="unit-num">شقة ${u.unit_number}</div>
-          <div class="unit-name">${u.tenant_name}</div>
-          <div class="unit-rent-small">${mr.toLocaleString()} ر.س / شهر</div>
+          <div class="u-num">شقة ${u.unit_number}</div>
+          <div class="u-name">${u.tenant_name}</div>
+          <div class="u-rent">${mr.toLocaleString()} ر.س / شهر</div>
         </div>
         <div class="pay-row">
-          ${u.paid
-            ? `<span class="paid-badge">دفع ✓</span><button class="pay-btn undo-pay" onclick="togglePay(${u.id})">تراجع</button>`
-            : `<span class="unpaid-badge">لم يدفع</span><button class="pay-btn do-pay" onclick="togglePay(${u.id})">دفع</button>`}
+          ${u.paid?`<span class="paid-pill">دفع ✓</span><button class="pay-btn undo-pay" onclick="togglePay(${u.id})">تراجع</button>`:`<span class="unpaid-pill">لم يدفع</span><button class="pay-btn do-pay" onclick="togglePay(${u.id})">دفع</button>`}
         </div>
-        ${u.maintenance ? `<div class="maint-strip">
-          <span class="maint-label">صيانة: ${u.maintenance.issue_type}</span>
-          <button class="maint-close-btn" onclick="closeMaint(${u.maintenance.id}, event)">إغلاق</button>
-        </div>` : ''}
+        ${u.maintenance?`<div class="maint-strip"><span class="maint-lbl">🔧 ${u.maintenance.issue_type}</span><button class="maint-close" onclick="closeMaint(${u.maintenance.id},event)">إغلاق</button></div>`:''}
       </div>`;
     } else {
-      return `<div class="unit-card empty" onclick="openAddModal(${u.id})">
-        <div class="unit-num">شقة ${u.unit_number}</div>
-        <div class="unit-name">شاغرة</div>
-        <div style="font-size:11px;color:#6B6B63;margin-top:6px;">اضغط لإضافة مستأجر</div>
+      return `<div class="u-card empty" onclick="openAddModal(${u.id})">
+        <div class="u-num">شقة ${u.unit_number}</div>
+        <div class="u-name">شاغرة</div>
+        <div class="empty-hint">اضغط لإضافة مستأجر</div>
       </div>`;
     }
   }).join('');
 }
-
-async function togglePay(unitId) {
-  const u = units.find(x => x.id === unitId);
-  if (!u) return;
-  if (u.paid) {
-    await sb.from('payments').delete().eq('unit_id', unitId).eq('month_key', currentMonthKey);
-    u.paid = false;
-  } else {
-    await sb.from('payments').insert({ unit_id: unitId, month_key: currentMonthKey, amount: Math.round((u.annual_rent||0)/12) });
-    u.paid = true;
-  }
+async function togglePay(uid){
+  const u=units.find(x=>x.id===uid);if(!u)return;
+  if(u.paid){await sb.from('payments').delete().eq('unit_id',uid).eq('month_key',currentMonthKey);u.paid=false;}
+  else{await sb.from('payments').insert({unit_id:uid,month_key:currentMonthKey,amount:Math.round((u.annual_rent||0)/12)});u.paid=true;}
   renderUnits();
 }
-
-async function closeMaint(maintId, e) {
+async function closeMaint(mId,e){
   e.stopPropagation();
-  await sb.from('maintenance_requests').update({ status: 'closed' }).eq('id', maintId);
-  const u = units.find(x => x.maintenance && x.maintenance.id === maintId);
-  if (u) u.maintenance = null;
-  renderUnits();
+  await sb.from('maintenance_requests').update({status:'closed'}).eq('id',mId);
+  const u=units.find(x=>x.maintenance&&x.maintenance.id===mId);
+  if(u)u.maintenance=null; renderUnits();
 }
-
-function viewUnit(unitId) {
-  const u = units.find(x => x.id === unitId);
-  if (!u) return;
-  selectedUnit = u;
-  const mr = Math.round((u.annual_rent||0)/12);
-  document.getElementById('vmBadge').textContent = `شقة ${u.unit_number}`;
-  document.getElementById('vmTitle').textContent = u.tenant_name;
-  document.getElementById('vmContent').innerHTML = `
+function viewUnit(uid){
+  const u=units.find(x=>x.id===uid);if(!u)return;
+  selectedUnit=u;
+  const mr=Math.round((u.annual_rent||0)/12);
+  document.getElementById('vmBadge').textContent=`شقة ${u.unit_number}`;
+  document.getElementById('vmTitle').textContent=u.tenant_name;
+  document.getElementById('vmContent').innerHTML=`
     <div class="detail-row"><span class="dk">رقم الجوال</span><span class="dv">${u.tenant_phone||'—'}</span></div>
     <div class="detail-row"><span class="dk">بداية العقد</span><span class="dv">${u.contract_start||'—'}</span></div>
     <div class="detail-row"><span class="dk">نهاية العقد</span><span class="dv">${u.contract_end||'—'}</span></div>
     <div class="detail-row"><span class="dk">الإيجار السنوي</span><span class="dv">${(u.annual_rent||0).toLocaleString()} ريال</span></div>
     <div class="detail-row"><span class="dk">الإيجار الشهري</span><span class="dv">${mr.toLocaleString()} ريال</span></div>
-    <div class="detail-row"><span class="dk">حالة ${currentMonthName}</span><span class="dv" style="color:${u.paid?'#1D9E75':'#BA7517'}">${u.paid?'دفع ✓':'لم يدفع بعد'}</span></div>
-    ${u.maintenance ? `
-    <div class="maint-section">
-      <div class="maint-section-title">طلب صيانة مفتوح</div>
-      <div class="maint-detail-box">
-        <div class="maint-type-badge">${u.maintenance.issue_type}</div>
-        <div>${u.maintenance.description}</div>
-        <div style="font-size:11px;color:#791F1F;margin-top:6px;">${u.maintenance.created_at?.slice(0,10)}</div>
-      </div>
-      <button style="margin-top:10px;width:100%;padding:8px;background:#E24B4A;color:#fff;border:none;border-radius:8px;font-size:13px;cursor:pointer;font-family:inherit;" onclick="closeMaintFromModal()">إغلاق طلب الصيانة</button>
-    </div>` : ''}
+    <div class="detail-row"><span class="dk">حالة ${currentMonthName}</span><span class="dv" style="color:${u.paid?'#2E7D32':'#D4A843'}">${u.paid?'دفع ✓':'لم يدفع بعد'}</span></div>
+    ${u.maintenance?`<div class="maint-modal-section">
+      <div class="maint-modal-title">🔧 طلب صيانة مفتوح</div>
+      <div class="maint-box"><div class="maint-type-tag">${u.maintenance.issue_type}</div><div>${u.maintenance.description}</div><div style="font-size:11px;color:#922B21;margin-top:6px;">${u.maintenance.created_at?.slice(0,10)}</div></div>
+      <button class="close-maint-btn" onclick="closeMaintFromModal()">إغلاق طلب الصيانة</button>
+    </div>`:''}
   `;
   document.getElementById('viewModal').classList.add('open');
 }
-
-async function closeMaintFromModal() {
-  if (!selectedUnit?.maintenance) return;
-  await sb.from('maintenance_requests').update({ status: 'closed' }).eq('id', selectedUnit.maintenance.id);
-  selectedUnit.maintenance = null;
-  closeModal('viewModal');
-  renderUnits();
+async function closeMaintFromModal(){
+  if(!selectedUnit?.maintenance)return;
+  await sb.from('maintenance_requests').update({status:'closed'}).eq('id',selectedUnit.maintenance.id);
+  selectedUnit.maintenance=null; closeModal('viewModal'); renderUnits();
 }
-
-function switchToEdit() { closeModal('viewModal'); if (selectedUnit) openAddModal(selectedUnit.id, true); }
-
-function openAddModal(unitId, isEdit) {
-  const u = units.find(x => x.id === unitId);
-  if (!u) return;
-  selectedUnit = u;
-  document.getElementById('amBadge').textContent = `شقة ${u.unit_number}`;
-  document.getElementById('amTitle').textContent = isEdit ? 'تعديل بيانات المستأجر' : 'إضافة مستأجر';
-  document.getElementById('fName').value = u.tenant_name||'';
-  document.getElementById('fPhone').value = u.tenant_phone||'';
-  document.getElementById('fStart').value = u.contract_start||'';
-  document.getElementById('fEnd').value = u.contract_end||'';
-  document.getElementById('fRent').value = u.annual_rent||'';
+function switchToEdit(){closeModal('viewModal');if(selectedUnit)openAddModal(selectedUnit.id,true);}
+function openAddModal(uid,isEdit){
+  const u=units.find(x=>x.id===uid);if(!u)return;
+  selectedUnit=u;
+  document.getElementById('amBadge').textContent=`شقة ${u.unit_number}`;
+  document.getElementById('amTitle').textContent=isEdit?'تعديل بيانات المستأجر':'إضافة مستأجر';
+  document.getElementById('fName').value=u.tenant_name||'';
+  document.getElementById('fPhone').value=u.tenant_phone||'';
+  document.getElementById('fStart').value=u.contract_start||'';
+  document.getElementById('fEnd').value=u.contract_end||'';
+  document.getElementById('fRent').value=u.annual_rent||'';
   document.getElementById('addModal').classList.add('open');
 }
-
-async function saveUnit() {
-  if (!selectedUnit) return;
-  const name = document.getElementById('fName').value.trim();
-  if (!name) { document.getElementById('fName').focus(); return; }
-  const data = {
-    tenant_name: name,
-    tenant_phone: document.getElementById('fPhone').value.trim(),
-    contract_start: document.getElementById('fStart').value || null,
-    contract_end: document.getElementById('fEnd').value || null,
-    annual_rent: parseInt(document.getElementById('fRent').value)||0,
-    status: 'occupied'
-  };
-  await sb.from('units').update(data).eq('id', selectedUnit.id);
-  Object.assign(selectedUnit, data);
-  closeModal('addModal');
-  renderUnits();
+async function saveUnit(){
+  if(!selectedUnit)return;
+  const name=document.getElementById('fName').value.trim();
+  if(!name){document.getElementById('fName').focus();return;}
+  const data={tenant_name:name,tenant_phone:document.getElementById('fPhone').value.trim(),contract_start:document.getElementById('fStart').value||null,contract_end:document.getElementById('fEnd').value||null,annual_rent:parseInt(document.getElementById('fRent').value)||0,status:'occupied'};
+  await sb.from('units').update(data).eq('id',selectedUnit.id);
+  Object.assign(selectedUnit,data); closeModal('addModal'); renderUnits();
 }
-
-async function vacateUnit() {
-  if (!selectedUnit || !confirm('هل أنت متأكد من إخلاء هذه الشقة؟')) return;
-  const data = { tenant_name: null, tenant_phone: null, contract_start: null, contract_end: null, annual_rent: 0, status: 'empty' };
-  await sb.from('units').update(data).eq('id', selectedUnit.id);
-  Object.assign(selectedUnit, data, { paid: false, maintenance: null });
-  closeModal('viewModal');
-  renderUnits();
+async function vacateUnit(){
+  if(!selectedUnit||!confirm('هل أنت متأكد من إخلاء هذه الشقة؟'))return;
+  const data={tenant_name:null,tenant_phone:null,contract_start:null,contract_end:null,annual_rent:0,status:'empty'};
+  await sb.from('units').update(data).eq('id',selectedUnit.id);
+  Object.assign(selectedUnit,data,{paid:false,maintenance:null});
+  closeModal('viewModal'); renderUnits();
 }
-
-function openReport() {
-  const occupied = units.filter(u => u.status === 'occupied');
-  const paidUnits = occupied.filter(u => u.paid);
-  const unpaidUnits = occupied.filter(u => !u.paid);
-  const maintUnits = occupied.filter(u => u.maintenance);
-  const totalExpected = occupied.reduce((s,u) => s + Math.round((u.annual_rent||0)/12), 0);
-  const totalCollected = paidUnits.reduce((s,u) => s + Math.round((u.annual_rent||0)/12), 0);
-  const totalRemaining = totalExpected - totalCollected;
-  const pct = totalExpected > 0 ? Math.round(totalCollected/totalExpected*100) : 0;
-
-  document.getElementById('reportTitle').textContent = `تحليل ${currentMonthName}`;
-  document.getElementById('reportContent').innerHTML = `
+function openReport(){
+  const occ=units.filter(u=>u.status==='occupied');
+  const paidU=occ.filter(u=>u.paid), unpaidU=occ.filter(u=>!u.paid), maintU=occ.filter(u=>u.maintenance);
+  const exp=occ.reduce((s,u)=>s+Math.round((u.annual_rent||0)/12),0);
+  const col=paidU.reduce((s,u)=>s+Math.round((u.annual_rent||0)/12),0);
+  const rem=exp-col, pct=exp>0?Math.round(col/exp*100):0;
+  document.getElementById('reportTitle').textContent=`تحليل ${currentMonthName}`;
+  document.getElementById('reportContent').innerHTML=`
     <div class="report-big">
-      <div class="rbig"><div class="rnum" style="color:#1D9E75;">${totalCollected.toLocaleString()}</div><div class="rlbl">تم تحصيله (ريال)</div></div>
-      <div class="rbig"><div class="rnum" style="color:#BA7517;">${totalRemaining.toLocaleString()}</div><div class="rlbl">متبقي (ريال)</div></div>
+      <div class="r-big"><div class="rn" style="color:#2E7D32;">${col.toLocaleString()}</div><div class="rl">تم تحصيله (ريال)</div></div>
+      <div class="r-big"><div class="rn" style="color:#D4A843;">${rem.toLocaleString()}</div><div class="rl">متبقي (ريال)</div></div>
     </div>
-    <div style="margin-bottom:14px;">
-      <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px;">
-        <span style="color:#6B6B63;">نسبة التحصيل</span><span style="font-weight:600;">${pct}%</span>
-      </div>
-      <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:${pct}%;background:${pct>=80?'#1D9E75':pct>=50?'#EF9F27':'#E24B4A'};"></div></div>
+    <div style="margin-bottom:1rem;">
+      <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px;"><span style="color:var(--text-mid);">نسبة التحصيل</span><span style="font-weight:700;">${pct}%</span></div>
+      <div class="prog-wrap"><div class="prog-fill" style="width:${pct}%;background:${pct>=80?'#2E7D32':pct>=50?'#D4A843':'#C0392B'};"></div></div>
     </div>
-    ${maintUnits.length>0?`<div style="margin-bottom:14px;">
-      <div style="font-size:13px;font-weight:600;color:#A32D2D;margin-bottom:8px;">طلبات صيانة مفتوحة (${maintUnits.length})</div>
-      ${maintUnits.map(u=>`<div class="report-row"><span>${u.tenant_name}</span><span style="color:#6B6B63;font-size:12px;">شقة ${u.unit_number}</span><span style="font-size:11px;padding:2px 8px;border-radius:10px;background:#FCEBEB;color:#791F1F;">${u.maintenance.issue_type}</span></div>`).join('')}
-    </div>`:''}
-    <div style="margin-bottom:14px;">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-        <span style="font-size:13px;font-weight:600;color:#6B6B63;">لم يدفعوا (${unpaidUnits.length})</span>
-        <span style="font-size:12px;color:#BA7517;font-weight:600;">${totalRemaining.toLocaleString()} ريال</span>
-      </div>
-      ${unpaidUnits.length===0?'<div style="font-size:13px;color:#6B6B63;text-align:center;padding:8px;">الجميع دفعوا ✓</div>':unpaidUnits.map(u=>`<div class="report-row"><span>${u.tenant_name}</span><span style="color:#6B6B63;font-size:12px;">شقة ${u.unit_number}</span><span style="font-size:11px;padding:2px 8px;border-radius:10px;background:#FAC775;color:#412402;">${Math.round((u.annual_rent||0)/12).toLocaleString()} ر.س</span></div>`).join('')}
-    </div>
-    <div>
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-        <span style="font-size:13px;font-weight:600;color:#6B6B63;">دفعوا (${paidUnits.length})</span>
-        <span style="font-size:12px;color:#1D9E75;font-weight:600;">${totalCollected.toLocaleString()} ريال</span>
-      </div>
-      ${paidUnits.length===0?'<div style="font-size:13px;color:#6B6B63;text-align:center;padding:8px;">لا أحد دفع بعد</div>':paidUnits.map(u=>`<div class="report-row"><span>${u.tenant_name}</span><span style="color:#6B6B63;font-size:12px;">شقة ${u.unit_number}</span><span style="font-size:11px;padding:2px 8px;border-radius:10px;background:#9FE1CB;color:#04342C;">${Math.round((u.annual_rent||0)/12).toLocaleString()} ر.س</span></div>`).join('')}
-    </div>
+    ${maintU.length>0?`<div class="r-sect">طلبات صيانة (${maintU.length})</div>${maintU.map(u=>`<div class="r-row"><span>${u.tenant_name}</span><span style="color:var(--text-mid);font-size:12px;">شقة ${u.unit_number}</span><span style="font-size:11px;padding:2px 8px;border-radius:20px;background:#FDECEC;color:#922B21;font-weight:700;">${u.maintenance.issue_type}</span></div>`).join('')}`:''}
+    <div class="r-sect">لم يدفعوا (${unpaidU.length}) — ${rem.toLocaleString()} ريال</div>
+    ${unpaidU.length===0?`<div style="font-size:13px;color:var(--text-mid);padding:8px 0;">الجميع دفعوا ✓</div>`:unpaidU.map(u=>`<div class="r-row"><span>${u.tenant_name}</span><span style="color:var(--text-mid);font-size:12px;">شقة ${u.unit_number}</span><span style="font-size:11px;padding:2px 8px;border-radius:20px;background:#FFF8E1;color:#F57F17;font-weight:700;">${Math.round((u.annual_rent||0)/12).toLocaleString()} ر.س</span></div>`).join('')}
+    <div class="r-sect">دفعوا (${paidU.length}) — ${col.toLocaleString()} ريال</div>
+    ${paidU.length===0?`<div style="font-size:13px;color:var(--text-mid);padding:8px 0;">لا أحد دفع بعد</div>`:paidU.map(u=>`<div class="r-row"><span>${u.tenant_name}</span><span style="color:var(--text-mid);font-size:12px;">شقة ${u.unit_number}</span><span style="font-size:11px;padding:2px 8px;border-radius:20px;background:#E8F5E9;color:#2E7D32;font-weight:700;">${Math.round((u.annual_rent||0)/12).toLocaleString()} ر.س</span></div>`).join('')}
   `;
   document.getElementById('reportModal').classList.add('open');
 }
-
-function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-
-// ===== بوابة المستأجر =====
-async function doTenantVerify() {
-  const unit = document.getElementById('tUnit').value.trim().padStart(3,'0');
-  const phone = document.getElementById('tPhone').value.trim();
-  document.getElementById('tError1').style.display = 'none';
-  const { data } = await sb.from('units').select('*').eq('unit_number', unit).eq('tenant_phone', phone).eq('status','occupied');
-  if (!data || data.length === 0) { document.getElementById('tError1').style.display = 'block'; return; }
-  currentTenant = data[0];
-  document.getElementById('tStep1').style.display = 'none';
-  document.getElementById('tStep2').style.display = 'block';
-}
-
-function doTenantOtp() {
-  const otp = document.getElementById('tOtp').value.trim();
-  document.getElementById('tError2').style.display = 'none';
-  if (otp !== '1234') { document.getElementById('tError2').style.display = 'block'; return; }
-  document.getElementById('tStep2').style.display = 'none';
-  document.getElementById('tStep3').style.display = 'block';
-}
-
-async function doSubmitMaint() {
-  const type = document.getElementById('tIssueType').value;
-  const desc = document.getElementById('tIssueDesc').value.trim();
-  document.getElementById('tError3').style.display = 'none';
-  if (!type || !desc) { document.getElementById('tError3').style.display = 'block'; return; }
-  await sb.from('maintenance_requests').insert({ unit_id: currentTenant.id, issue_type: type, description: desc, status: 'open' });
-  document.getElementById('tStep3').style.display = 'none';
-  document.getElementById('tStep4').style.display = 'block';
-}
-
-function resetTenant() {
-  currentTenant = null;
-  ['tUnit','tPhone','tOtp','tIssueDesc'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; });
-  document.getElementById('tIssueType').value = '';
-  ['tStep2','tStep3','tStep4'].forEach(id => document.getElementById(id).style.display = 'none');
-  document.getElementById('tStep1').style.display = 'block';
-  ['tError1','tError2','tError3'].forEach(id => document.getElementById(id).style.display = 'none');
-}
-
-// بداية التطبيق
-showRole();
+function closeModal(id){document.getElementById(id).classList.remove('open');}
 </script>
 </body>
 </html>
