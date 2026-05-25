@@ -14,13 +14,13 @@
   --white: #FFFDF8;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Tajawal', sans-serif; direction: rtl; background: var(--brown); color: var(--text-dark); min-height: 100vh; }
-.screen { display: none; min-height: 100vh; }
-.screen.active { display: block; min-height: 100vh; }
-  
-/* LOGIN */
-#loginScreen { display: flex; align-items: center; justify-content: center; padding: 2rem; background: var(--brown); }
+body { font-family: 'Tajawal', sans-serif; direction: rtl; background: var(--brown); color: var(--text-dark); }
+.screen { display: none; }
+.screen.active { display: block; }
+#loginScreen { min-height: 100vh; display: none; align-items: center; justify-content: center; padding: 2rem; background: var(--brown); }
 #loginScreen.active { display: flex; }
+#homeScreen { min-height: 100vh; background: var(--cream); }
+#buildingScreen { min-height: 100vh; background: var(--cream); }
 .login-card { background: var(--cream); border-radius: 16px; padding: 2.5rem 2rem; width: 100%; max-width: 340px; }
 .login-header { text-align: center; margin-bottom: 2rem; }
 .mini-logo { width: 56px; height: 56px; background: var(--brown); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 24px; font-weight: 700; color: var(--cream); }
@@ -34,10 +34,7 @@ body { font-family: 'Tajawal', sans-serif; direction: rtl; background: var(--bro
 .btn-main { width: 100%; padding: 13px; background: var(--brown); color: var(--cream); border: none; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: 'Tajawal', sans-serif; transition: background 0.15s; }
 .btn-main:hover { background: var(--brown-dark); }
 .error-box { font-size: 13px; color: #7A2E1E; background: #F5D5CF; padding: 9px 12px; border-radius: 8px; margin-bottom: 12px; display: none; }
-
-/* HOME */
-#homeScreen { background: var(--cream); min-height: 100vh; }
-  .top-bar { background: var(--brown); padding: 1rem 1.5rem; display: flex; align-items: center; justify-content: space-between; }
+.top-bar { background: var(--brown); padding: 1rem 1.5rem; display: flex; align-items: center; justify-content: space-between; }
 .brand { display: flex; align-items: center; gap: 12px; }
 .s-mark { width: 36px; height: 36px; background: var(--cream); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; color: var(--brown); }
 .brand h1 { font-size: 16px; font-weight: 700; color: var(--cream); }
@@ -55,9 +52,6 @@ body { font-family: 'Tajawal', sans-serif; direction: rtl; background: var(--bro
 .b-card p { font-size: 13px; color: var(--text-mid); margin-top: 3px; }
 .b-count { display: inline-block; background: var(--brown); color: var(--cream); font-size: 12px; padding: 3px 10px; border-radius: 20px; margin-top: 10px; font-weight: 500; }
 .loading-state { text-align: center; padding: 3rem; color: var(--text-mid); font-size: 15px; }
-
-/* BUILDING */
-#buildingScreen { background: var(--cream); }
 .b-header { background: var(--brown); padding: 1rem 1.5rem; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 .b-back { background: rgba(240,234,214,0.15); border: 1px solid rgba(240,234,214,0.3); color: var(--cream); padding: 7px 14px; border-radius: 7px; font-size: 13px; cursor: pointer; font-family: 'Tajawal', sans-serif; }
 .b-back:hover { background: rgba(240,234,214,0.25); }
@@ -99,8 +93,6 @@ body { font-family: 'Tajawal', sans-serif; direction: rtl; background: var(--bro
 .maint-lbl { font-size: 11px; color: #922B21; font-weight: 700; }
 .maint-close { font-size: 10px; padding: 3px 8px; background: #C0392B; color: #fff; border: none; border-radius: 5px; cursor: pointer; font-family: 'Tajawal', sans-serif; }
 .empty-hint { font-size: 11px; color: var(--text-light); margin-top: 6px; }
-
-/* MODALS */
 .modal-bg { display: none; position: fixed; inset: 0; background: rgba(44,26,20,0.55); z-index: 200; align-items: center; justify-content: center; padding: 1rem; }
 .modal-bg.open { display: flex; }
 .modal { background: var(--white); border-radius: 14px; border: 1px solid var(--cream-dark); padding: 1.75rem; width: 100%; max-width: 390px; max-height: 90vh; overflow-y: auto; }
@@ -135,7 +127,6 @@ body { font-family: 'Tajawal', sans-serif; direction: rtl; background: var(--bro
 </head>
 <body>
 
-<!-- تسجيل الدخول -->
 <div id="loginScreen" class="screen active">
   <div class="login-card">
     <div class="login-header">
@@ -146,18 +137,17 @@ body { font-family: 'Tajawal', sans-serif; direction: rtl; background: var(--bro
     <div class="field"><label>اسم المستخدم</label><input id="ownerUser" type="text" placeholder="admin"></div>
     <div class="field"><label>كلمة المرور</label><input id="ownerPass" type="password" placeholder="••••••••"></div>
     <div id="ownerError" class="error-box">بيانات خاطئة، حاول مرة ثانية</div>
-   <button class="btn-main" id="loginBtn">دخول</button>
+    <button class="btn-main" id="loginBtn">دخول</button>
   </div>
 </div>
 
-<!-- الرئيسية -->
 <div id="homeScreen" class="screen">
   <div class="top-bar">
     <div class="brand">
       <div class="s-mark">ش</div>
       <div><h1>إدارة أملاك شذى الأثير</h1><p>لوحة التحكم الرئيسية</p></div>
     </div>
-    <button class="logout-btn" onclick="doLogout()">خروج</button>
+    <button class="logout-btn" id="logoutBtn">خروج</button>
   </div>
   <div class="main-content">
     <div class="section-title">العمارات</div>
@@ -165,13 +155,12 @@ body { font-family: 'Tajawal', sans-serif; direction: rtl; background: var(--bro
   </div>
 </div>
 
-<!-- شاشة الشقق -->
 <div id="buildingScreen" class="screen">
   <div class="b-header">
-    <button class="b-back" onclick="goHome()">→ رجوع</button>
+    <button class="b-back" id="backBtn">→ رجوع</button>
     <div class="b-header-title"><h2 id="bTitle"></h2><p id="bSub"></p></div>
     <span class="month-pill" id="monthLabel"></span>
-    <button class="report-pill" onclick="openReport()">التحليل الشهري</button>
+    <button class="report-pill" id="reportBtn">التحليل الشهري</button>
   </div>
   <div class="b-content">
     <div class="stats-strip">
@@ -179,26 +168,24 @@ body { font-family: 'Tajawal', sans-serif; direction: rtl; background: var(--bro
       <div class="s-card"><div class="s-num" id="sOccupied" style="color:var(--brown);">0</div><div class="s-lbl">مؤجرة</div></div>
       <div class="s-card"><div class="s-num" id="sPaid" style="color:#D4A843;">0</div><div class="s-lbl">دفعوا هذا الشهر</div></div>
     </div>
-    <div class="search-wrap"><input type="text" id="searchInput" placeholder="ابحث باسم المستأجر أو رقم الشقة..." oninput="renderUnits()"></div>
+    <div class="search-wrap"><input type="text" id="searchInput" placeholder="ابحث باسم المستأجر أو رقم الشقة..."></div>
     <div class="units-grid" id="unitsGrid"></div>
   </div>
 </div>
 
-<!-- مودال التفاصيل -->
 <div id="viewModal" class="modal-bg">
   <div class="modal">
     <div id="vmBadge" class="modal-badge"></div>
     <h3 id="vmTitle"></h3>
     <div id="vmContent"></div>
     <div class="modal-actions">
-      <button class="btn-modal-danger" onclick="vacateUnit()">إخلاء</button>
-      <button class="btn-modal-cancel" onclick="closeModal('viewModal')">إغلاق</button>
-      <button class="btn-modal-primary" onclick="switchToEdit()">تعديل</button>
+      <button class="btn-modal-danger" id="vacateBtn">إخلاء</button>
+      <button class="btn-modal-cancel" id="closeViewBtn">إغلاق</button>
+      <button class="btn-modal-primary" id="editBtn">تعديل</button>
     </div>
   </div>
 </div>
 
-<!-- مودال إضافة/تعديل -->
 <div id="addModal" class="modal-bg">
   <div class="modal">
     <div id="amBadge" class="modal-badge"></div>
@@ -209,18 +196,17 @@ body { font-family: 'Tajawal', sans-serif; direction: rtl; background: var(--bro
     <div class="field"><label>تاريخ نهاية العقد</label><input id="fEnd" type="date"></div>
     <div class="field"><label>قيمة الإيجار (ريال / سنة)</label><input id="fRent" type="number" placeholder="20000"></div>
     <div class="modal-actions">
-      <button class="btn-modal-cancel" onclick="closeModal('addModal')">إلغاء</button>
-      <button class="btn-modal-primary" onclick="saveUnit()">حفظ</button>
+      <button class="btn-modal-cancel" id="closeAddBtn">إلغاء</button>
+      <button class="btn-modal-primary" id="saveBtn">حفظ</button>
     </div>
   </div>
 </div>
 
-<!-- مودال التقرير -->
 <div id="reportModal" class="modal-bg">
   <div class="modal" style="max-width:430px;">
     <h3 id="reportTitle">التحليل الشهري</h3>
     <div id="reportContent"></div>
-    <div class="modal-actions"><button class="btn-modal-cancel" onclick="closeModal('reportModal')">إغلاق</button></div>
+    <div class="modal-actions"><button class="btn-modal-cancel" id="closeReportBtn">إغلاق</button></div>
   </div>
 </div>
 
@@ -230,192 +216,245 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 const OWNER_USER = 'admin', OWNER_PASS = '1234';
 const NOW = new Date();
-const currentMonthKey = `${NOW.getFullYear()}-${String(NOW.getMonth()+1).padStart(2,'0')}`;
-const monthNames = ["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"];
-const currentMonthName = `${monthNames[NOW.getMonth()]} ${NOW.getFullYear()}`;
-let buildings=[], units=[], currentBuilding=null, selectedUnit=null;
-document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('loginBtn').addEventListener('click', doOwnerLogin);
-});
+const currentMonthKey = NOW.getFullYear() + '-' + String(NOW.getMonth()+1).padStart(2,'0');
+const monthNames = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+const currentMonthName = monthNames[NOW.getMonth()] + ' ' + NOW.getFullYear();
+var buildings = [], units = [], currentBuilding = null, selectedUnit = null;
+
 function setScreen(id) {
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  var screens = document.querySelectorAll('.screen');
+  for (var i = 0; i < screens.length; i++) { screens[i].classList.remove('active'); }
   document.getElementById(id).classList.add('active');
-  window.scrollTo(0, 0);
+  window.scrollTo(0,0);
 }
 
-}
-
-function doOwnerLogin() {
-  const u=document.getElementById('ownerUser').value.trim();
-  const p=document.getElementById('ownerPass').value.trim();
-  document.getElementById('ownerError').style.display='none';
-  if(u!==OWNER_USER||p!==OWNER_PASS){document.getElementById('ownerError').style.display='block';return;}
-  setScreen('homeScreen'); loadBuildings();
-}
-
-function doLogout(){ setScreen('loginScreen'); }
-
-async function loadBuildings(){
-  const{data}=await sb.from('buildings').select('*').order('id');
-  buildings=data||[];
-  document.getElementById('buildingsGrid').innerHTML=buildings.map((b,i)=>`
-    <div class="b-card" onclick="openBuilding(${b.id})">
-      <div class="b-icon">${i===0?'🏢':'🏗️'}</div>
-      <h2>${b.name}</h2><p>${b.neighborhood}</p>
-      <span class="b-count">${b.total_units} شقة</span>
-    </div>`).join('');
-}
-
-async function openBuilding(bId){
-  currentBuilding=buildings.find(b=>b.id===bId);
-  document.getElementById('bTitle').textContent=currentBuilding.name;
-  document.getElementById('bSub').textContent=currentBuilding.neighborhood;
-  document.getElementById('monthLabel').textContent=currentMonthName;
-  document.getElementById('searchInput').value='';
-  setScreen('buildingScreen');
-  const{data:uData}=await sb.from('units').select('*').eq('building_id',bId).order('unit_number');
-  const{data:pData}=await sb.from('payments').select('*').eq('month_key',currentMonthKey);
-  const{data:mData}=await sb.from('maintenance_requests').select('*').eq('status','open');
-  units=(uData||[]).map(u=>({...u,paid:(pData||[]).some(p=>p.unit_id===u.id),maintenance:(mData||[]).find(m=>m.unit_id===u.id)||null}));
-  renderUnits();
-}
-
-function goHome(){setScreen('homeScreen');}
-
-function renderUnits(){
-  const q=document.getElementById('searchInput').value.toLowerCase();
-  const filtered=units.filter(u=>u.unit_number.includes(q)||(u.tenant_name||'').toLowerCase().includes(q));
-  const occupied=units.filter(u=>u.status==='occupied').length;
-  const paid=units.filter(u=>u.paid).length;
-  document.getElementById('sTotalUnits').textContent=currentBuilding.total_units;
-  document.getElementById('sOccupied').textContent=occupied;
-  document.getElementById('sPaid').textContent=`${paid}/${occupied}`;
-  document.getElementById('unitsGrid').innerHTML=filtered.map(u=>{
-    if(u.status==='occupied'){
-      const mr=Math.round((u.annual_rent||0)/12);
-      const cls=`u-card occupied${u.paid?'':' unpaid'}${u.maintenance?' has-maint':''}`;
-      return `<div class="${cls}">
-        ${u.maintenance?'<div class="maint-dot"></div>':''}
-        <div style="cursor:pointer;" onclick="viewUnit(${u.id})">
-          <div class="u-num">شقة ${u.unit_number}</div>
-          <div class="u-name">${u.tenant_name}</div>
-          <div class="u-rent">${mr.toLocaleString()} ر.س / شهر</div>
-        </div>
-        <div class="pay-row">
-          ${u.paid?`<span class="paid-pill">دفع ✓</span><button class="pay-btn undo-pay" onclick="togglePay(${u.id})">تراجع</button>`:`<span class="unpaid-pill">لم يدفع</span><button class="pay-btn do-pay" onclick="togglePay(${u.id})">دفع</button>`}
-        </div>
-        ${u.maintenance?`<div class="maint-strip"><span class="maint-lbl">🔧 ${u.maintenance.issue_type}</span><button class="maint-close" onclick="closeMaint(${u.maintenance.id},event)">إغلاق</button></div>`:''}
-      </div>`;
-    } else {
-      return `<div class="u-card empty" onclick="openAddModal(${u.id})">
-        <div class="u-num">شقة ${u.unit_number}</div>
-        <div class="u-name">شاغرة</div>
-        <div class="empty-hint">اضغط لإضافة مستأجر</div>
-      </div>`;
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('loginBtn').addEventListener('click', function() {
+    var u = document.getElementById('ownerUser').value.trim();
+    var p = document.getElementById('ownerPass').value.trim();
+    document.getElementById('ownerError').style.display = 'none';
+    if (u !== OWNER_USER || p !== OWNER_PASS) {
+      document.getElementById('ownerError').style.display = 'block';
+      return;
     }
-  }).join('');
+    setScreen('homeScreen');
+    loadBuildings();
+  });
+
+  document.getElementById('logoutBtn').addEventListener('click', function() { setScreen('loginScreen'); });
+  document.getElementById('backBtn').addEventListener('click', function() { setScreen('homeScreen'); });
+  document.getElementById('reportBtn').addEventListener('click', openReport);
+  document.getElementById('closeViewBtn').addEventListener('click', function() { closeModal('viewModal'); });
+  document.getElementById('closeAddBtn').addEventListener('click', function() { closeModal('addModal'); });
+  document.getElementById('closeReportBtn').addEventListener('click', function() { closeModal('reportModal'); });
+  document.getElementById('vacateBtn').addEventListener('click', vacateUnit);
+  document.getElementById('editBtn').addEventListener('click', function() { closeModal('viewModal'); if(selectedUnit) openAddModal(selectedUnit.id, true); });
+  document.getElementById('saveBtn').addEventListener('click', saveUnit);
+  document.getElementById('searchInput').addEventListener('input', renderUnits);
+});
+
+async function loadBuildings() {
+  var result = await sb.from('buildings').select('*').order('id');
+  buildings = result.data || [];
+  var html = '';
+  for (var i = 0; i < buildings.length; i++) {
+    var b = buildings[i];
+    html += '<div class="b-card" data-id="' + b.id + '"><div class="b-icon">' + (i===0?'🏢':'🏗️') + '</div><h2>' + b.name + '</h2><p>' + b.neighborhood + '</p><span class="b-count">' + b.total_units + ' شقة</span></div>';
+  }
+  document.getElementById('buildingsGrid').innerHTML = html;
+  var cards = document.querySelectorAll('.b-card');
+  for (var j = 0; j < cards.length; j++) {
+    cards[j].addEventListener('click', function() { openBuilding(parseInt(this.dataset.id)); });
+  }
 }
 
-async function togglePay(uid){
-  const u=units.find(x=>x.id===uid);if(!u)return;
-  if(u.paid){await sb.from('payments').delete().eq('unit_id',uid).eq('month_key',currentMonthKey);u.paid=false;}
-  else{await sb.from('payments').insert({unit_id:uid,month_key:currentMonthKey,amount:Math.round((u.annual_rent||0)/12)});u.paid=true;}
+async function openBuilding(bId) {
+  currentBuilding = null;
+  for (var i = 0; i < buildings.length; i++) { if (buildings[i].id === bId) { currentBuilding = buildings[i]; break; } }
+  document.getElementById('bTitle').textContent = currentBuilding.name;
+  document.getElementById('bSub').textContent = currentBuilding.neighborhood;
+  document.getElementById('monthLabel').textContent = currentMonthName;
+  document.getElementById('searchInput').value = '';
+  setScreen('buildingScreen');
+  var uResult = await sb.from('units').select('*').eq('building_id', bId).order('unit_number');
+  var pResult = await sb.from('payments').select('*').eq('month_key', currentMonthKey);
+  var mResult = await sb.from('maintenance_requests').select('*').eq('status','open');
+  var pData = pResult.data || [];
+  var mData = mResult.data || [];
+  units = (uResult.data || []).map(function(u) {
+    var paid = false;
+    for (var i = 0; i < pData.length; i++) { if (pData[i].unit_id === u.id) { paid = true; break; } }
+    var maint = null;
+    for (var j = 0; j < mData.length; j++) { if (mData[j].unit_id === u.id) { maint = mData[j]; break; } }
+    return Object.assign({}, u, { paid: paid, maintenance: maint });
+  });
   renderUnits();
 }
 
-async function closeMaint(mId,e){
-  e.stopPropagation();
-  await sb.from('maintenance_requests').update({status:'closed'}).eq('id',mId);
-  const u=units.find(x=>x.maintenance&&x.maintenance.id===mId);
-  if(u)u.maintenance=null; renderUnits();
+function renderUnits() {
+  var q = document.getElementById('searchInput').value.toLowerCase();
+  var filtered = units.filter(function(u) { return u.unit_number.includes(q) || (u.tenant_name||'').toLowerCase().includes(q); });
+  var occupied = units.filter(function(u) { return u.status==='occupied'; }).length;
+  var paid = units.filter(function(u) { return u.paid; }).length;
+  document.getElementById('sTotalUnits').textContent = currentBuilding.total_units;
+  document.getElementById('sOccupied').textContent = occupied;
+  document.getElementById('sPaid').textContent = paid + '/' + occupied;
+  var html = '';
+  for (var i = 0; i < filtered.length; i++) {
+    var u = filtered[i];
+    if (u.status === 'occupied') {
+      var mr = Math.round((u.annual_rent||0)/12);
+      var cls = 'u-card occupied' + (u.paid?'':' unpaid') + (u.maintenance?' has-maint':'');
+      html += '<div class="' + cls + '" data-id="' + u.id + '">';
+      if (u.maintenance) html += '<div class="maint-dot"></div>';
+      html += '<div class="u-clickable" data-id="' + u.id + '" style="cursor:pointer;"><div class="u-num">شقة ' + u.unit_number + '</div><div class="u-name">' + u.tenant_name + '</div><div class="u-rent">' + mr.toLocaleString() + ' ر.س / شهر</div></div>';
+      html += '<div class="pay-row">';
+      if (u.paid) {
+        html += '<span class="paid-pill">دفع ✓</span><button class="pay-btn undo-pay" data-uid="' + u.id + '">تراجع</button>';
+      } else {
+        html += '<span class="unpaid-pill">لم يدفع</span><button class="pay-btn do-pay" data-uid="' + u.id + '">دفع</button>';
+      }
+      html += '</div>';
+      if (u.maintenance) {
+        html += '<div class="maint-strip"><span class="maint-lbl">🔧 ' + u.maintenance.issue_type + '</span><button class="maint-close" data-mid="' + u.maintenance.id + '">إغلاق</button></div>';
+      }
+      html += '</div>';
+    } else {
+      html += '<div class="u-card empty" data-uid="' + u.id + '"><div class="u-num">شقة ' + u.unit_number + '</div><div class="u-name">شاغرة</div><div class="empty-hint">اضغط لإضافة مستأجر</div></div>';
+    }
+  }
+  document.getElementById('unitsGrid').innerHTML = html;
+
+  document.querySelectorAll('.u-clickable').forEach(function(el) {
+    el.addEventListener('click', function() { viewUnit(parseInt(this.dataset.id)); });
+  });
+  document.querySelectorAll('.u-card.empty').forEach(function(el) {
+    el.addEventListener('click', function() { openAddModal(parseInt(this.dataset.uid), false); });
+  });
+  document.querySelectorAll('.pay-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() { togglePay(parseInt(this.dataset.uid)); });
+  });
+  document.querySelectorAll('.maint-close').forEach(function(btn) {
+    btn.addEventListener('click', function(e) { e.stopPropagation(); closeMaint(parseInt(this.dataset.mid)); });
+  });
 }
 
-function viewUnit(uid){
-  const u=units.find(x=>x.id===uid);if(!u)return;
-  selectedUnit=u;
-  const mr=Math.round((u.annual_rent||0)/12);
-  document.getElementById('vmBadge').textContent=`شقة ${u.unit_number}`;
-  document.getElementById('vmTitle').textContent=u.tenant_name;
-  document.getElementById('vmContent').innerHTML=`
-    <div class="detail-row"><span class="dk">رقم الجوال</span><span class="dv">${u.tenant_phone||'—'}</span></div>
-    <div class="detail-row"><span class="dk">بداية العقد</span><span class="dv">${u.contract_start||'—'}</span></div>
-    <div class="detail-row"><span class="dk">نهاية العقد</span><span class="dv">${u.contract_end||'—'}</span></div>
-    <div class="detail-row"><span class="dk">الإيجار السنوي</span><span class="dv">${(u.annual_rent||0).toLocaleString()} ريال</span></div>
-    <div class="detail-row"><span class="dk">الإيجار الشهري</span><span class="dv">${mr.toLocaleString()} ريال</span></div>
-    <div class="detail-row"><span class="dk">حالة ${currentMonthName}</span><span class="dv" style="color:${u.paid?'#2E7D32':'#D4A843'}">${u.paid?'دفع ✓':'لم يدفع بعد'}</span></div>
-    ${u.maintenance?`<div class="maint-modal-section">
-      <div class="maint-modal-title">🔧 طلب صيانة مفتوح</div>
-      <div class="maint-box"><div class="maint-type-tag">${u.maintenance.issue_type}</div><div>${u.maintenance.description}</div><div style="font-size:11px;color:#922B21;margin-top:6px;">${u.maintenance.created_at?.slice(0,10)}</div></div>
-      <button class="close-maint-btn" onclick="closeMaintFromModal()">إغلاق طلب الصيانة</button>
-    </div>`:''}
-  `;
+async function togglePay(uid) {
+  var u = null;
+  for (var i = 0; i < units.length; i++) { if (units[i].id === uid) { u = units[i]; break; } }
+  if (!u) return;
+  if (u.paid) { await sb.from('payments').delete().eq('unit_id',uid).eq('month_key',currentMonthKey); u.paid = false; }
+  else { await sb.from('payments').insert({unit_id:uid,month_key:currentMonthKey,amount:Math.round((u.annual_rent||0)/12)}); u.paid = true; }
+  renderUnits();
+}
+
+async function closeMaint(mId) {
+  await sb.from('maintenance_requests').update({status:'closed'}).eq('id',mId);
+  for (var i = 0; i < units.length; i++) { if (units[i].maintenance && units[i].maintenance.id === mId) { units[i].maintenance = null; break; } }
+  renderUnits();
+}
+
+function viewUnit(uid) {
+  var u = null;
+  for (var i = 0; i < units.length; i++) { if (units[i].id === uid) { u = units[i]; break; } }
+  if (!u) return;
+  selectedUnit = u;
+  var mr = Math.round((u.annual_rent||0)/12);
+  document.getElementById('vmBadge').textContent = 'شقة ' + u.unit_number;
+  document.getElementById('vmTitle').textContent = u.tenant_name;
+  var html = '<div class="detail-row"><span class="dk">رقم الجوال</span><span class="dv">' + (u.tenant_phone||'—') + '</span></div>';
+  html += '<div class="detail-row"><span class="dk">بداية العقد</span><span class="dv">' + (u.contract_start||'—') + '</span></div>';
+  html += '<div class="detail-row"><span class="dk">نهاية العقد</span><span class="dv">' + (u.contract_end||'—') + '</span></div>';
+  html += '<div class="detail-row"><span class="dk">الإيجار السنوي</span><span class="dv">' + (u.annual_rent||0).toLocaleString() + ' ريال</span></div>';
+  html += '<div class="detail-row"><span class="dk">الإيجار الشهري</span><span class="dv">' + mr.toLocaleString() + ' ريال</span></div>';
+  html += '<div class="detail-row"><span class="dk">حالة ' + currentMonthName + '</span><span class="dv" style="color:' + (u.paid?'#2E7D32':'#D4A843') + '">' + (u.paid?'دفع ✓':'لم يدفع بعد') + '</span></div>';
+  if (u.maintenance) {
+    html += '<div class="maint-modal-section"><div class="maint-modal-title">🔧 طلب صيانة مفتوح</div><div class="maint-box"><div class="maint-type-tag">' + u.maintenance.issue_type + '</div><div>' + u.maintenance.description + '</div><div style="font-size:11px;color:#922B21;margin-top:6px;">' + (u.maintenance.created_at||'').slice(0,10) + '</div></div><button class="close-maint-btn" id="closeMaintModalBtn">إغلاق طلب الصيانة</button></div>';
+  }
+  document.getElementById('vmContent').innerHTML = html;
+  if (u.maintenance) {
+    document.getElementById('closeMaintModalBtn').addEventListener('click', closeMaintFromModal);
+  }
   document.getElementById('viewModal').classList.add('open');
 }
 
-async function closeMaintFromModal(){
-  if(!selectedUnit?.maintenance)return;
+async function closeMaintFromModal() {
+  if (!selectedUnit || !selectedUnit.maintenance) return;
   await sb.from('maintenance_requests').update({status:'closed'}).eq('id',selectedUnit.maintenance.id);
-  selectedUnit.maintenance=null; closeModal('viewModal'); renderUnits();
+  selectedUnit.maintenance = null;
+  closeModal('viewModal');
+  renderUnits();
 }
 
-function switchToEdit(){closeModal('viewModal');if(selectedUnit)openAddModal(selectedUnit.id,true);}
+async function vacateUnit() {
+  if (!selectedUnit || !confirm('هل أنت متأكد من إخلاء هذه الشقة؟')) return;
+  var data = {tenant_name:null,tenant_phone:null,contract_start:null,contract_end:null,annual_rent:0,status:'empty'};
+  await sb.from('units').update(data).eq('id',selectedUnit.id);
+  Object.assign(selectedUnit, data, {paid:false,maintenance:null});
+  closeModal('viewModal');
+  renderUnits();
+}
 
-function openAddModal(uid,isEdit){
-  const u=units.find(x=>x.id===uid);if(!u)return;
-  selectedUnit=u;
-  document.getElementById('amBadge').textContent=`شقة ${u.unit_number}`;
-  document.getElementById('amTitle').textContent=isEdit?'تعديل بيانات المستأجر':'إضافة مستأجر';
-  document.getElementById('fName').value=u.tenant_name||'';
-  document.getElementById('fPhone').value=u.tenant_phone||'';
-  document.getElementById('fStart').value=u.contract_start||'';
-  document.getElementById('fEnd').value=u.contract_end||'';
-  document.getElementById('fRent').value=u.annual_rent||'';
+function openAddModal(uid, isEdit) {
+  var u = null;
+  for (var i = 0; i < units.length; i++) { if (units[i].id === uid) { u = units[i]; break; } }
+  if (!u) return;
+  selectedUnit = u;
+  document.getElementById('amBadge').textContent = 'شقة ' + u.unit_number;
+  document.getElementById('amTitle').textContent = isEdit ? 'تعديل بيانات المستأجر' : 'إضافة مستأجر';
+  document.getElementById('fName').value = u.tenant_name||'';
+  document.getElementById('fPhone').value = u.tenant_phone||'';
+  document.getElementById('fStart').value = u.contract_start||'';
+  document.getElementById('fEnd').value = u.contract_end||'';
+  document.getElementById('fRent').value = u.annual_rent||'';
   document.getElementById('addModal').classList.add('open');
 }
 
-async function saveUnit(){
-  if(!selectedUnit)return;
-  const name=document.getElementById('fName').value.trim();
-  if(!name){document.getElementById('fName').focus();return;}
-  const data={tenant_name:name,tenant_phone:document.getElementById('fPhone').value.trim(),contract_start:document.getElementById('fStart').value||null,contract_end:document.getElementById('fEnd').value||null,annual_rent:parseInt(document.getElementById('fRent').value)||0,status:'occupied'};
+async function saveUnit() {
+  if (!selectedUnit) return;
+  var name = document.getElementById('fName').value.trim();
+  if (!name) { document.getElementById('fName').focus(); return; }
+  var data = {
+    tenant_name: name,
+    tenant_phone: document.getElementById('fPhone').value.trim(),
+    contract_start: document.getElementById('fStart').value || null,
+    contract_end: document.getElementById('fEnd').value || null,
+    annual_rent: parseInt(document.getElementById('fRent').value)||0,
+    status: 'occupied'
+  };
   await sb.from('units').update(data).eq('id',selectedUnit.id);
-  Object.assign(selectedUnit,data); closeModal('addModal'); renderUnits();
+  Object.assign(selectedUnit, data);
+  closeModal('addModal');
+  renderUnits();
 }
 
-async function vacateUnit(){
-  if(!selectedUnit||!confirm('هل أنت متأكد من إخلاء هذه الشقة؟'))return;
-  const data={tenant_name:null,tenant_phone:null,contract_start:null,contract_end:null,annual_rent:0,status:'empty'};
-  await sb.from('units').update(data).eq('id',selectedUnit.id);
-  Object.assign(selectedUnit,data,{paid:false,maintenance:null});
-  closeModal('viewModal'); renderUnits();
-}
-
-function openReport(){
-  const occ=units.filter(u=>u.status==='occupied');
-  const paidU=occ.filter(u=>u.paid), unpaidU=occ.filter(u=>!u.paid), maintU=occ.filter(u=>u.maintenance);
-  const exp=occ.reduce((s,u)=>s+Math.round((u.annual_rent||0)/12),0);
-  const col=paidU.reduce((s,u)=>s+Math.round((u.annual_rent||0)/12),0);
-  const rem=exp-col, pct=exp>0?Math.round(col/exp*100):0;
-  document.getElementById('reportTitle').textContent=`تحليل ${currentMonthName}`;
-  document.getElementById('reportContent').innerHTML=`
-    <div class="report-big">
-      <div class="r-big"><div class="rn" style="color:#2E7D32;">${col.toLocaleString()}</div><div class="rl">تم تحصيله (ريال)</div></div>
-      <div class="r-big"><div class="rn" style="color:#D4A843;">${rem.toLocaleString()}</div><div class="rl">متبقي (ريال)</div></div>
-    </div>
-    <div style="margin-bottom:1rem;">
-      <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px;"><span style="color:var(--text-mid);">نسبة التحصيل</span><span style="font-weight:700;">${pct}%</span></div>
-      <div class="prog-wrap"><div class="prog-fill" style="width:${pct}%;background:${pct>=80?'#2E7D32':pct>=50?'#D4A843':'#C0392B'};"></div></div>
-    </div>
-    ${maintU.length>0?`<div class="r-sect">طلبات صيانة (${maintU.length})</div>${maintU.map(u=>`<div class="r-row"><span>${u.tenant_name}</span><span style="color:var(--text-mid);font-size:12px;">شقة ${u.unit_number}</span><span style="font-size:11px;padding:2px 8px;border-radius:20px;background:#FDECEC;color:#922B21;font-weight:700;">${u.maintenance.issue_type}</span></div>`).join('')}`:''}
-    <div class="r-sect">لم يدفعوا (${unpaidU.length}) — ${rem.toLocaleString()} ريال</div>
-    ${unpaidU.length===0?`<div style="font-size:13px;color:var(--text-mid);padding:8px 0;">الجميع دفعوا ✓</div>`:unpaidU.map(u=>`<div class="r-row"><span>${u.tenant_name}</span><span style="color:var(--text-mid);font-size:12px;">شقة ${u.unit_number}</span><span style="font-size:11px;padding:2px 8px;border-radius:20px;background:#FFF8E1;color:#F57F17;font-weight:700;">${Math.round((u.annual_rent||0)/12).toLocaleString()} ر.س</span></div>`).join('')}
-    <div class="r-sect">دفعوا (${paidU.length}) — ${col.toLocaleString()} ريال</div>
-    ${paidU.length===0?`<div style="font-size:13px;color:var(--text-mid);padding:8px 0;">لا أحد دفع بعد</div>`:paidU.map(u=>`<div class="r-row"><span>${u.tenant_name}</span><span style="color:var(--text-mid);font-size:12px;">شقة ${u.unit_number}</span><span style="font-size:11px;padding:2px 8px;border-radius:20px;background:#E8F5E9;color:#2E7D32;font-weight:700;">${Math.round((u.annual_rent||0)/12).toLocaleString()} ر.س</span></div>`).join('')}
-  `;
+function openReport() {
+  var occ = units.filter(function(u){return u.status==='occupied';});
+  var paidU = occ.filter(function(u){return u.paid;});
+  var unpaidU = occ.filter(function(u){return !u.paid;});
+  var maintU = occ.filter(function(u){return u.maintenance;});
+  var exp = 0; for(var i=0;i<occ.length;i++){exp+=Math.round((occ[i].annual_rent||0)/12);}
+  var col = 0; for(var j=0;j<paidU.length;j++){col+=Math.round((paidU[j].annual_rent||0)/12);}
+  var rem = exp - col;
+  var pct = exp > 0 ? Math.round(col/exp*100) : 0;
+  document.getElementById('reportTitle').textContent = 'تحليل ' + currentMonthName;
+  var html = '<div class="report-big"><div class="r-big"><div class="rn" style="color:#2E7D32;">' + col.toLocaleString() + '</div><div class="rl">تم تحصيله (ريال)</div></div><div class="r-big"><div class="rn" style="color:#D4A843;">' + rem.toLocaleString() + '</div><div class="rl">متبقي (ريال)</div></div></div>';
+  html += '<div style="margin-bottom:1rem;"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px;"><span style="color:var(--text-mid);">نسبة التحصيل</span><span style="font-weight:700;">' + pct + '%</span></div><div class="prog-wrap"><div class="prog-fill" style="width:' + pct + '%;background:' + (pct>=80?'#2E7D32':pct>=50?'#D4A843':'#C0392B') + ';"></div></div></div>';
+  if (maintU.length > 0) {
+    html += '<div class="r-sect">طلبات صيانة (' + maintU.length + ')</div>';
+    for (var m=0;m<maintU.length;m++){html+='<div class="r-row"><span>'+maintU[m].tenant_name+'</span><span style="color:var(--text-mid);font-size:12px;">شقة '+maintU[m].unit_number+'</span><span style="font-size:11px;padding:2px 8px;border-radius:20px;background:#FDECEC;color:#922B21;font-weight:700;">'+maintU[m].maintenance.issue_type+'</span></div>';}
+  }
+  html += '<div class="r-sect">لم يدفعوا (' + unpaidU.length + ') — ' + rem.toLocaleString() + ' ريال</div>';
+  if (unpaidU.length===0) { html += '<div style="font-size:13px;color:var(--text-mid);padding:8px 0;">الجميع دفعوا ✓</div>'; }
+  else { for(var u2=0;u2<unpaidU.length;u2++){html+='<div class="r-row"><span>'+unpaidU[u2].tenant_name+'</span><span style="color:var(--text-mid);font-size:12px;">شقة '+unpaidU[u2].unit_number+'</span><span style="font-size:11px;padding:2px 8px;border-radius:20px;background:#FFF8E1;color:#F57F17;font-weight:700;">'+Math.round((unpaidU[u2].annual_rent||0)/12).toLocaleString()+' ر.س</span></div>';} }
+  html += '<div class="r-sect">دفعوا (' + paidU.length + ') — ' + col.toLocaleString() + ' ريال</div>';
+  if (paidU.length===0) { html += '<div style="font-size:13px;color:var(--text-mid);padding:8px 0;">لا أحد دفع بعد</div>'; }
+  else { for(var p2=0;p2<paidU.length;p2++){html+='<div class="r-row"><span>'+paidU[p2].tenant_name+'</span><span style="color:var(--text-mid);font-size:12px;">شقة '+paidU[p2].unit_number+'</span><span style="font-size:11px;padding:2px 8px;border-radius:20px;background:#E8F5E9;color:#2E7D32;font-weight:700;">'+Math.round((paidU[p2].annual_rent||0)/12).toLocaleString()+' ر.س</span></div>';} }
+  document.getElementById('reportContent').innerHTML = html;
   document.getElementById('reportModal').classList.add('open');
 }
 
-function closeModal(id){document.getElementById(id).classList.remove('open');}
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 </script>
 </body>
 </html>
