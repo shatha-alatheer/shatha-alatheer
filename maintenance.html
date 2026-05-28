@@ -30,6 +30,7 @@ body { font-family: 'Tajawal', sans-serif; direction: rtl; background: var(--bro
 .field textarea { resize: none; height: 90px; }
 .btn { width: 100%; padding: 13px; background: var(--brown); color: var(--cream); border: none; border-radius: 9px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: 'Tajawal', sans-serif; transition: background 0.15s; }
 .btn:hover { background: var(--brown-dark); }
+.btn:disabled { background: var(--cream-darker); cursor: not-allowed; }
 .error-box { font-size: 13px; color: #7A2E1E; background: #F5D5CF; padding: 9px 12px; border-radius: 8px; margin-bottom: 14px; display: none; }
 .hint { font-size: 13px; color: var(--text-mid); text-align: center; margin-bottom: 16px; line-height: 1.7; }
 .hint strong { color: var(--text-dark); font-weight: 700; }
@@ -44,6 +45,7 @@ body { font-family: 'Tajawal', sans-serif; direction: rtl; background: var(--bro
 .divider { height: 1px; background: var(--cream-dark); margin: 1.25rem 0; }
 .back-row { text-align: center; margin-top: 12px; font-size: 13px; color: var(--text-light); }
 .back-row a { color: var(--brown); font-weight: 700; text-decoration: none; }
+.loading-text { text-align: center; color: var(--text-mid); font-size: 13px; margin-bottom: 12px; }
 </style>
 </head>
 <body>
@@ -58,17 +60,17 @@ body { font-family: 'Tajawal', sans-serif; direction: rtl; background: var(--bro
     <div id="step1" class="step active">
       <div class="field"><label>رقم الشقة</label><input id="tUnit" type="text" placeholder="مثال: 003" maxlength="3"></div>
       <div class="field"><label>رقم جوالك المسجل</label><input id="tPhone" type="tel" placeholder="05xxxxxxxx"></div>
-      <div id="err1" class="error-box">رقم الشقة أو الجوال غير صحيح</div>
-      <button class="btn" onclick="doVerify()">إرسال رمز التحقق</button>
+      <div id="err1" class="error-box"></div>
+      <button class="btn" id="sendBtn">إرسال رمز التحقق</button>
       <div class="back-row"><a href="index.html">→ الرجوع للرئيسية</a></div>
     </div>
 
     <div id="step2" class="step">
       <p class="hint">أرسلنا رمز التحقق على رقم<br><strong id="maskedPhone"></strong></p>
-      <input class="otp-input" id="tOtp" type="text" placeholder="· · · ·" maxlength="4">
-      <div id="err2" class="error-box">الرمز غير صحيح، حاول مرة ثانية</div>
-      <button class="btn" onclick="doOtp()">تحقق</button>
-      <div class="resend-row">لم يصلك الرمز؟ <span onclick="doVerify()">إعادة الإرسال</span></div>
+      <input class="otp-input" id="tOtp" type="text" placeholder="· · · ·" maxlength="6">
+      <div id="err2" class="error-box"></div>
+      <button class="btn" id="verifyBtn">تحقق</button>
+      <div class="resend-row">لم يصلك الرمز؟ <span id="resendBtn">إعادة الإرسال</span></div>
     </div>
 
     <div id="step3" class="step">
@@ -83,8 +85,8 @@ body { font-family: 'Tajawal', sans-serif; direction: rtl; background: var(--bro
         </select>
       </div>
       <div class="field"><label>وصف المشكلة</label><textarea id="tDesc" placeholder="اشرح المشكلة بالتفصيل..."></textarea></div>
-      <div id="err3" class="error-box">يرجى ملء جميع الحقول</div>
-      <button class="btn" onclick="doSubmit()">إرسال الطلب</button>
+      <div id="err3" class="error-box"></div>
+      <button class="btn" id="submitBtn">إرسال الطلب</button>
     </div>
 
     <div id="step4" class="step">
@@ -92,53 +94,147 @@ body { font-family: 'Tajawal', sans-serif; direction: rtl; background: var(--bro
         <div class="success-circle">✓</div>
         <h2>تم إرسال طلبك</h2>
         <p>وصل طلبك للمالك وسيتم التواصل معك قريباً</p>
-        <button class="btn" onclick="reset()">إرسال طلب آخر</button>
+        <button class="btn" id="resetBtn">إرسال طلب آخر</button>
         <div class="back-row"><a href="index.html">→ الرجوع للرئيسية</a></div>
       </div>
     </div>
 
   </div>
 </div>
+
 <script>
-const SUPABASE_URL = 'https://nzlqgqsnimfjvhpgpdjv.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im56bHFncXNuaW1manZocGdwZGp2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MzM2ODIsImV4cCI6MjA5MzMwOTY4Mn0.0orAgXL_rJ1enSMN6yMK_CfGqdkQ70NPD9qHcQW3gnM';
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-let currentTenant=null, generatedOtp=null;
+var SUPABASE_URL = 'https://nzlqgqsnimfjvhpgpdjv.supabase.co';
+var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im56bHFncXNuaW1manZocGdwZGp2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MzM2ODIsImV4cCI6MjA5MzMwOTY4Mn0.0orAgXL_rJ1enSMN6yMK_CfGqdkQ70NPD9qHcQW3gnM';
+var sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+var currentTenant = null;
+var currentPhone = null;
 
-function showStep(n){document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));document.getElementById('step'+n).classList.add('active');}
-function hideErrors(){document.querySelectorAll('.error-box').forEach(e=>e.style.display='none');}
+function showStep(n) {
+  var steps = document.querySelectorAll('.step');
+  for (var i = 0; i < steps.length; i++) { steps[i].classList.remove('active'); }
+  document.getElementById('step' + n).classList.add('active');
+}
 
-async function doVerify(){
-  hideErrors();
-  const unit=document.getElementById('tUnit').value.trim().padStart(3,'0');
-  const phone=document.getElementById('tPhone').value.trim();
-  if(!unit||!phone){const e=document.getElementById('err1');e.textContent='يرجى ملء جميع الحقول';e.style.display='block';return;}
-  const{data}=await sb.from('units').select('*').eq('unit_number',unit).eq('tenant_phone',phone).eq('status','occupied');
-  if(!data||data.length===0){document.getElementById('err1').style.display='block';return;}
-  currentTenant=data[0];
-  generatedOtp=Math.floor(1000+Math.random()*9000).toString();
-  console.log('OTP:',generatedOtp);
-  document.getElementById('maskedPhone').textContent=phone.slice(0,4)+'****'+phone.slice(-2);
-  document.getElementById('tOtp').value='';
-  showStep(2);
+function showError(id, msg) {
+  var el = document.getElementById(id);
+  el.textContent = msg;
+  el.style.display = 'block';
 }
-function doOtp(){
-  hideErrors();
-  if(document.getElementById('tOtp').value.trim()!==generatedOtp){document.getElementById('err2').style.display='block';return;}
-  showStep(3);
+
+function hideErrors() {
+  var errors = document.querySelectorAll('.error-box');
+  for (var i = 0; i < errors.length; i++) { errors[i].style.display = 'none'; }
 }
-async function doSubmit(){
+
+function formatPhone(phone) {
+  var p = phone.trim();
+  if (p.startsWith('05')) { return '+966' + p.slice(1); }
+  if (p.startsWith('5')) { return '+966' + p; }
+  if (p.startsWith('+')) { return p; }
+  return '+966' + p;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('sendBtn').addEventListener('click', doVerify);
+  document.getElementById('verifyBtn').addEventListener('click', doOtp);
+  document.getElementById('resendBtn').addEventListener('click', doVerify);
+  document.getElementById('submitBtn').addEventListener('click', doSubmit);
+  document.getElementById('resetBtn').addEventListener('click', doReset);
+});
+
+async function doVerify() {
   hideErrors();
-  const type=document.getElementById('tType').value, desc=document.getElementById('tDesc').value.trim();
-  if(!type||!desc){document.getElementById('err3').style.display='block';return;}
-  await sb.from('maintenance_requests').insert({unit_id:currentTenant.id,issue_type:type,description:desc,status:'open'});
+  var unit = document.getElementById('tUnit').value.trim().padStart(3,'0');
+  var phone = document.getElementById('tPhone').value.trim();
+  if (!unit || !phone) { showError('err1', 'يرجى ملء جميع الحقول'); return; }
+
+  var btn = document.getElementById('sendBtn');
+  btn.disabled = true;
+  btn.textContent = 'جاري الإرسال...';
+
+  var result = await sb.from('units').select('*').eq('unit_number', unit).eq('tenant_phone', phone).eq('status','occupied');
+  if (!result.data || result.data.length === 0) {
+    showError('err1', 'رقم الشقة أو الجوال غير صحيح');
+    btn.disabled = false;
+    btn.textContent = 'إرسال رمز التحقق';
+    return;
+  }
+  currentTenant = result.data[0];
+  currentPhone = formatPhone(phone);
+
+  var response = await fetch('/api/send-otp', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ phone: currentPhone, action: 'send' })
+  });
+  var data = await response.json();
+
+  btn.disabled = false;
+  btn.textContent = 'إرسال رمز التحقق';
+
+  if (data.status === 'pending' || data.status === 'approved') {
+    var masked = phone.slice(0,4) + '****' + phone.slice(-2);
+    document.getElementById('maskedPhone').textContent = masked;
+    document.getElementById('tOtp').value = '';
+    showStep(2);
+  } else {
+    showError('err1', 'حدث خطأ أثناء الإرسال، حاول مرة ثانية');
+  }
+}
+
+async function doOtp() {
+  hideErrors();
+  var code = document.getElementById('tOtp').value.trim();
+  if (!code) { showError('err2', 'يرجى إدخال الرمز'); return; }
+
+  var btn = document.getElementById('verifyBtn');
+  btn.disabled = true;
+  btn.textContent = 'جاري التحقق...';
+
+  var response = await fetch('/api/send-otp', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ phone: currentPhone, action: 'verify', code: code })
+  });
+  var data = await response.json();
+
+  btn.disabled = false;
+  btn.textContent = 'تحقق';
+
+  if (data.valid) {
+    showStep(3);
+  } else {
+    showError('err2', 'الرمز غير صحيح، حاول مرة ثانية');
+  }
+}
+
+async function doSubmit() {
+  hideErrors();
+  var type = document.getElementById('tType').value;
+  var desc = document.getElementById('tDesc').value.trim();
+  if (!type || !desc) { showError('err3', 'يرجى ملء جميع الحقول'); return; }
+
+  var btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = 'جاري الإرسال...';
+
+  await sb.from('maintenance_requests').insert({ unit_id: currentTenant.id, issue_type: type, description: desc, status: 'open' });
+
+  btn.disabled = false;
+  btn.textContent = 'إرسال الطلب';
   showStep(4);
 }
-function reset(){
-  currentTenant=null;generatedOtp=null;
-  ['tUnit','tPhone','tOtp','tDesc'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-  document.getElementById('tType').value='';
-  hideErrors();showStep(1);
+
+function doReset() {
+  currentTenant = null;
+  currentPhone = null;
+  document.getElementById('tUnit').value = '';
+  document.getElementById('tPhone').value = '';
+  document.getElementById('tOtp').value = '';
+  document.getElementById('tType').value = '';
+  document.getElementById('tDesc').value = '';
+  hideErrors();
+  showStep(1);
 }
 </script>
 </body>
